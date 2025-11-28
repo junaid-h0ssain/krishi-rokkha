@@ -1,7 +1,7 @@
 // modules/auth.js
 import { auth, db, fbAuthApi, fbDbApi } from "../src/firebase-config.js";
 const { onAuthStateChanged, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, sendPasswordResetEmail, signOut } = fbAuthApi;
+    signInWithEmailAndPassword, sendPasswordResetEmail, signOut, GoogleAuthProvider, signInWithPopup } = fbAuthApi;
 const { doc, setDoc, getDoc } = fbDbApi;
 
 export function initAuth(setCurrentUser) {
@@ -11,7 +11,7 @@ export function initAuth(setCurrentUser) {
     const showLoginBtn = document.getElementById("show-login");
     const resetPasswordBtn = document.getElementById("reset-password-btn");
     const logoutBtn = document.getElementById("logout-btn");
-    
+
     // Extra buttons for OTP/Google login
     const sendOtpBtn = document.getElementById("send-otp-btn");
     const googleLoginBtn = document.getElementById("google-login-btn");
@@ -98,8 +98,36 @@ export function initAuth(setCurrentUser) {
         alert("Phone OTP login not implemented yet.");
     });
 
-    googleLoginBtn?.addEventListener("click", () => {
-        alert("Google login not implemented yet.");
+    googleLoginBtn?.addEventListener("click", async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            // Check if user exists in Firestore, if not create one
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (!userDocSnap.exists()) {
+                const createdAt = new Date().toISOString();
+                await setDoc(userDocRef, {
+                    name: user.displayName || "User",
+                    email: user.email,
+                    phone: user.phoneNumber || "",
+                    language: "en",
+                    createdAt,
+                    badges: [],
+                    division: "",
+                    district: "",
+                    upazila: "",
+                    onboardingCompleted: false
+                });
+            }
+            // onAuthStateChanged will handle the UI switch
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            alert("Google Login failed: " + error.message);
+        }
     });
 
     onAuthStateChanged(auth, async (user) => {

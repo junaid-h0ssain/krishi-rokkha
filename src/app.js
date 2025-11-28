@@ -13,7 +13,9 @@ const {
     EmailAuthProvider,
     RecaptchaVerifier,
     PhoneAuthProvider,
-    updatePhoneNumber
+    updatePhoneNumber,
+    GoogleAuthProvider,
+    signInWithPopup
 } = fbAuthApi;
 
 const {
@@ -38,6 +40,7 @@ const showRegisterBtn = document.getElementById("show-register");
 const showLoginBtn = document.getElementById("show-login");
 const resetPasswordBtn = document.getElementById("reset-password-btn");
 const logoutBtn = document.getElementById("logout-btn");
+const googleLoginBtn = document.getElementById("google-login-btn");
 
 const navDashboard = document.getElementById("nav-dashboard");
 const navProfile = document.getElementById("nav-profile");
@@ -205,6 +208,47 @@ loginForm.addEventListener("submit", async (e) => {
         alert("Invalid credentials.");
     }
 });
+
+// Google Login
+if (googleLoginBtn) {
+    googleLoginBtn.addEventListener("click", async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            // Check if user exists in Firestore, if not create one
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (!userDocSnap.exists()) {
+                const createdAt = new Date().toISOString();
+                await setDoc(userDocRef, {
+                    name: user.displayName || "User",
+                    email: user.email,
+                    phone: user.phoneNumber || "",
+                    bio: "",
+                    language: "en",
+                    createdAt,
+                    badges: []
+                });
+                currentLang = "en";
+                localStorage.setItem("hg_lang", currentLang);
+            } else {
+                // Existing user, load language preference
+                const data = userDocSnap.data();
+                if (data.language) {
+                    currentLang = data.language;
+                    localStorage.setItem("hg_lang", currentLang);
+                }
+            }
+            // onAuthStateChanged will handle the UI switch
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            alert("Google Login failed: " + error.message);
+        }
+    });
+}
 
 resetPasswordBtn.addEventListener("click", async () => {
     const email = document.getElementById("login-email").value.trim();
