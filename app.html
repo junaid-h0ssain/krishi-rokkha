@@ -18,54 +18,51 @@
             <!-- LOGIN CARD (default visible) -->
             <div id="login-card" class="card">
                 <div class="card-header">
-                    <h2>Login</h2>
-                    <h4><a href="/">Back to home page</a></h4>
+                    <h2 data-i18n="loginTitle">Login</h2>
+                    <h4><a href="/" data-i18n="backToHome">Back to home page</a></h4>
                 </div>
                 <form id="login-form">
-                    <input type="email" id="login-email" placeholder="Email" required />
-                    <input type="password" id="login-password" placeholder="Password" required />
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <input type="email" id="login-email" data-i18n-placeholder="emailPlaceholder" placeholder="Email"
+                        required />
+                    <input type="password" id="login-password" data-i18n-placeholder="passwordPlaceholder"
+                        placeholder="Password" required />
+                    <button type="submit" class="btn btn-primary" data-i18n="loginBtn">Login</button>
                 </form>
 
-                <!-- <p class="divider">Or</p> -->
-
-                <!-- phone + OTP (UI only for now)
-        <form id="phone-login-form">
-          <input type="tel" id="login-phone" placeholder="+880123456789" />
-          <button type="button" id="send-otp-btn" class="btn btn-dark">Send OTP</button>
-        </form> -->
-
-                <p class="divider">Or Google Login</p>
-                <button type="button" id="google-login-btn" class="btn btn-google">
+                <p class="divider" data-i18n="orGoogle">Or Google Login</p>
+                <button type="button" id="google-login-btn" class="btn btn-google" data-i18n="googleLoginBtn">
                     Login with Google
                 </button>
 
                 <p class="divider">Or</p>
-                <button type="button" id="reset-password-btn" class="btn btn-dark">
+                <button type="button" id="reset-password-btn" class="btn btn-dark" data-i18n="forgotPassword">
                     Forgot Password?
                 </button>
 
-                <button id="show-register" class="btn btn-secondary">
+                <button id="show-register" class="btn btn-secondary" data-i18n="createAccount">
                     Create account
                 </button>
             </div>
 
             <!-- REGISTER CARD (hidden by default) -->
             <div id="register-card" class="card hidden">
-                <h2>Register</h2>
+                <h2 data-i18n="registerTitle">Register</h2>
                 <form id="register-form">
-                    <input type="text" id="reg-name" placeholder="Full name" required />
-                    <input type="email" id="reg-email" placeholder="Email" required />
-                    <input type="password" id="reg-password" placeholder="Password" required />
-                    <input type="tel" id="reg-phone" placeholder="Phone" />
+                    <input type="text" id="reg-name" data-i18n-placeholder="fullNamePlaceholder" placeholder="Full name"
+                        required />
+                    <input type="email" id="reg-email" data-i18n-placeholder="emailPlaceholder" placeholder="Email"
+                        required />
+                    <input type="password" id="reg-password" data-i18n-placeholder="passwordPlaceholder"
+                        placeholder="Password" required />
+                    <input type="tel" id="reg-phone" data-i18n-placeholder="phonePlaceholder" placeholder="Phone" />
                     <select id="reg-language">
                         <option value="en">English</option>
                         <option value="bn">বাংলা</option>
                     </select>
-                    <button type="submit" class="btn btn-primary">Sign up</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="signUpBtn">Sign up</button>
                 </form>
 
-                <button id="show-login" class="btn btn-primary">
+                <button id="show-login" class="btn btn-primary" data-i18n="backToLogin">
                     Back to login
                 </button>
             </div>
@@ -81,145 +78,300 @@
                         <option value="en">English</option>
                         <option value="bn">বাংলা</option>
                     </select>
-                    <button id="nav-dashboard">Dashboard</button>
-                    <button id="nav-weather">Weather</button>
-                    <button id="nav-ai-scanner">AI Scanner</button>
-                    <button id="nav-profile">Profile</button>
-                    <button id="logout-btn">Logout</button>
+                    <button id="nav-dashboard" data-i18n="navDashboard">Dashboard</button>
+                    <button id="nav-weather" data-i18n="navWeather">Weather</button>
+                    <button id="nav-ai-scanner" data-i18n="navAiScanner">AI Scanner</button>
+                    <button id="nav-profile" data-i18n="navProfile">Profile</button>
+                    <button id="logout-btn" data-i18n="navLogout">Logout</button>
                 </div>
             </nav>
 
             <!-- Dashboard -->
             <section id="dashboard-view">
-                <h2 id="dash-title">Dashboard</h2>
+                <h2 id="dash-title" data-i18n="dashTitle">Dashboard</h2>
 
                 <div id="analytics">
-                    <div>Active batches: <span id="stat-active">0</span></div>
-                    <div>Completed batches: <span id="stat-completed">0</span></div>
-                    <div>Mitigated risks: <span id="stat-mitigated">0</span></div>
-                    <div>Total weight (kg): <span id="stat-weight">0</span></div>
+                    <div><span data-i18n="activeBatchesStat">Active batches:</span> <span id="stat-active">0</span>
+                    </div>
+                    <div><span data-i18n="completedBatchesStat">Completed batches:</span> <span
+                            id="stat-completed">0</span></div>
+                    <div><span data-i18n="mitigatedRisksStat">Mitigated risks:</span> <span id="stat-mitigated">0</span>
+                    </div>
+                    <div><span data-i18n="totalWeightStat">Total weight (kg):</span> <span id="stat-weight">0</span>
+                    </div>
                 </div>
 
-                <h3>Create batch</h3>
+                <h3 data-i18n="createBatchTitle">Create batch</h3>
                 <form id="batch-form">
                     <select id="batch-crop-select">
-                        <option value="">Select crop type (optional)</option>
-                        <option value="Paddy">Paddy</option>
-                        <option value="Rice">Rice</option>
-                        <option value="Jute">Jute</option>
-                        <option value="Wheat">Wheat</option>
-                        <option value="Other">Other (use text field below)</option>
+                        <option value="" data-i18n="selectCropDefault">Select crop type (optional)</option>
+                        <option value="Paddy" data-i18n="paddy">Paddy</option>
+                        <option value="Rice" data-i18n="rice">Rice</option>
+                        <option value="Jute" data-i18n="jute">Jute</option>
+                        <option value="Wheat" data-i18n="wheat">Wheat</option>
+                        <option value="Other" data-i18n="otherCrop">Other (use text field below)</option>
                     </select>
-                    <input id="batch-crop" placeholder="Or enter custom crop type" required />
-                    <input id="batch-weight" type="number" step="0.01" placeholder="Weight (kg)" required />
+                    <input id="batch-crop" data-i18n-placeholder="cropPlaceholder"
+                        placeholder="Or enter custom crop type" required />
+                    <input id="batch-weight" type="number" step="0.01" data-i18n-placeholder="weightPlaceholder"
+                        placeholder="Weight (kg)" required />
                     <input id="batch-date" type="date" required />
                     <select id="batch-date-type" required>
-                        <option value="">Select date type</option>
-                        <option value="Harvest">Harvest Date</option>
-                        <option value="Expiry">Expiry Date</option>
-                        <option value="Transformation">Transformation Date</option>
+                        <option value="" data-i18n="dateTypeDefault">Select date type</option>
+                        <option value="Harvest" data-i18n="harvestDate">Harvest Date</option>
+                        <option value="Expiry" data-i18n="expiryDate">Expiry Date</option>
+                        <option value="Transformation" data-i18n="transformationDate">Transportation Date</option>
                     </select>
                     <select id="batch-storage" required>
-                        <option value="">Select storage type</option>
-                        <option value="Jute Bag Stack">Jute Bag Stack</option>
-                        <option value="Silo">Silo</option>
-                        <option value="Open Area">Open Area</option>
+                        <option value="" data-i18n="storageTypeDefault">Select storage type</option>
+                        <option value="Jute Bag Stack" data-i18n="juteBag">Jute Bag Stack</option>
+                        <option value="Silo" data-i18n="silo">Silo</option>
+                        <option value="Open Area" data-i18n="openArea">Open Area</option>
                     </select>
                     <select id="batch-location" required></select>
                     <label>
-                        Image:
+                        <span data-i18n="imageLabel">Image:</span>
                         <input id="batch-image" type="file" accept="image/*" />
                     </label>
-                    <button type="submit">Add batch</button>
+                    <button type="submit" data-i18n="addBatchBtn">Add batch</button>
                 </form>
 
-                <h3>Active batches</h3>
+                <h3 data-i18n="activeBatchesTitle">Active batches</h3>
                 <div id="active-batches"></div>
-                <div id="no-batches-msg" class="hidden">No active batches.</div>
+                <div id="no-batches-msg" class="hidden" data-i18n="noBatches">No active batches.</div>
 
-                <h3>Badges</h3>
+                <h3 data-i18n="badgesTitle">Badges</h3>
                 <ul id="badges-list"></ul>
-                <div id="no-badges-msg" class="hidden">No badges earned yet.</div>
+                <div id="no-badges-msg" class="hidden" data-i18n="noBadges">No badges earned yet.</div>
 
-                <h3>Risk alerts</h3>
+                <h3 data-i18n="riskAlertsTitle">Risk alerts</h3>
                 <div id="alerts-container"></div>
 
-                <h3>Export data</h3>
-                <button id="export-btn">Export JSON + CSV</button>
+                <h3 data-i18n="exportDataTitle">Export data</h3>
+                <button id="export-btn" data-i18n="exportBtn">Export JSON + CSV</button>
             </section>
 
             <!-- Weather View -->
             <section id="weather-view" class="hidden">
-                <h2>আবহাওয়া ও পরামর্শ (Weather & Advisory)</h2>
+                <h2 data-i18n="weatherTitle">আবহাওয়া ও পরামর্শ (Weather & Advisory)</h2>
 
                 <div class="weather-controls">
-                    <label for="weather-location">এলাকা নির্বাচন করুন (Select Area):</label>
+                    <label for="weather-location" data-i18n="selectAreaLabel">এলাকা নির্বাচন করুন (Select Area):</label>
                     <select id="weather-location">
-                        <option value="">-- নির্বাচন করুন --</option>
+                        <option value="" data-i18n="selectOptionDefault">-- নির্বাচন করুন --</option>
                         <!-- Options will be populated by JS -->
                     </select>
                 </div>
 
                 <div id="weather-panel" class="weather-grid">
                     <!-- Weather cards will go here -->
-                    <p>দয়া করে একটি এলাকা নির্বাচন করুন।</p>
+                    <p data-i18n="selectAreaMsg">দয়া করে একটি এলাকা নির্বাচন করুন।</p>
                 </div>
             </section>
 
             <!-- AI Scanner -->
             <section id="ai-scanner-view" class="hidden">
-                <h2 id="scanner-title">Crop Health Scanner (AI)</h2>
-                <p id="scanner-subtitle" class="text-sm text-gray-600 mb-4">
-                    ফসলের ছবি তুলুন বা আপলোড করুন, সিস্টেম বলবে ফসলটি Fresh নাকি Rotten।
-                </p>
+                <style>
+                    /* Premium UI for AI Scanner */
+                    .scanner-card {
+                        background: #ffffff;
+                        border-radius: 24px;
+                        padding: 2.5rem 2rem;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+                        max-width: 480px;
+                        margin: 2rem auto;
+                        text-align: center;
+                        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+                        border: 1px solid rgba(0, 0, 0, 0.02);
+                    }
 
-                <div class="space-y-3">
-                    <div>
-                        <input id="ai-scan-input" type="file" accept="image/*" capture="environment"
-                            class="w-full border rounded px-3 py-2 text-sm" style="margin: 10;" />
+                    .scanner-header h2 {
+                        color: #1a4731;
+                        margin: 0 0 0.5rem 0;
+                        font-size: 2rem;
+                        font-weight: 800;
+                        letter-spacing: -0.5px;
+                    }
+
+                    .scanner-header p {
+                        color: #718096;
+                        margin: 0 0 2.5rem 0;
+                        font-size: 1rem;
+                        line-height: 1.5;
+                    }
+
+                    .upload-box {
+                        border: 2px dashed #cbd5e0;
+                        border-radius: 20px;
+                        padding: 3rem 1.5rem;
+                        position: relative;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        background: #f8fafc;
+                        margin-bottom: 2rem;
+                        cursor: pointer;
+                        overflow: hidden;
+                    }
+
+                    .upload-box:hover {
+                        border-color: #2f855a;
+                        background: #f0fff4;
+                        transform: translateY(-2px);
+                    }
+
+                    .upload-box input[type="file"] {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        opacity: 0;
+                        cursor: pointer;
+                        z-index: 10;
+                    }
+
+                    .upload-content {
+                        pointer-events: none;
+                    }
+
+                    .upload-icon {
+                        font-size: 3.5rem;
+                        margin-bottom: 1rem;
+                        display: block;
+                        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+                    }
+
+                    .upload-label {
+                        color: #2d3748;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        display: block;
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .upload-sublabel {
+                        color: #a0aec0;
+                        font-size: 0.9rem;
+                        display: block;
+                    }
+
+                    #ai-scan-button {
+                        background: linear-gradient(135deg, #2f855a 0%, #22543d 100%);
+                        color: white;
+                        border: none;
+                        padding: 1.2rem;
+                        width: 100%;
+                        border-radius: 16px;
+                        font-size: 1.1rem;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 10px 20px rgba(47, 133, 90, 0.2);
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                    }
+
+                    #ai-scan-button:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 15px 30px rgba(47, 133, 90, 0.3);
+                    }
+
+                    #ai-scan-button:active {
+                        transform: translateY(-1px);
+                    }
+
+                    #ai-scan-status {
+                        margin-top: 1.5rem;
+                        font-size: 1rem;
+                        min-height: 1.5em;
+                        font-weight: 500;
+                        color: #4a5568;
+                    }
+
+                    #ai-scan-preview {
+                        width: 100%;
+                        max-height: 350px;
+                        object-fit: contain;
+                        border-radius: 16px;
+                        margin-top: 2rem;
+                        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                        display: block;
+                        background: #fff;
+                    }
+
+                    /* Ensure hidden class still works with high specificity */
+                    #ai-scan-preview.hidden {
+                        display: none !important;
+                    }
+
+                    #ai-scan-result {
+                        margin-top: 2rem;
+                        padding: 1.5rem;
+                        border-radius: 16px;
+                        background: #fff;
+                        transition: all 0.3s ease;
+                    }
+
+                    #ai-scan-result:not(:empty) {
+                        background: #f7fafc;
+                        border: 1px solid #e2e8f0;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+                    }
+                </style>
+
+                <div class="scanner-card">
+                    <div class="scanner-header">
+                        <h2 id="scanner-title" data-i18n="scannerTitle">🌱 AI Crop Doctor</h2>
+                        <p id="scanner-subtitle" data-i18n="scannerSubtitle">Take a photo or upload an image to
+                            instantly detect crop diseases with
+                            our advanced AI.</p>
                     </div>
 
-                    <button id="ai-scan-button" class="btn btn-primary w-full text-sm" type="button">
-                        Scan crop health
+                    <div class="upload-box">
+                        <div class="upload-content">
+                            <span class="upload-icon">📸</span>
+                            <span class="upload-label" data-i18n="uploadLabel">Tap to Upload or Capture</span>
+                            <span class="upload-sublabel" data-i18n="uploadSublabel">Supports JPG, PNG</span>
+                        </div>
+                        <input id="ai-scan-input" type="file" accept="image/*" capture="environment" />
+                    </div>
+
+                    <button id="ai-scan-button" type="button" data-i18n="analyzeBtn">
+                        🔍 Analyze Health
                     </button>
 
-                    <p id="ai-scan-status" class="text-xs text-gray-600"></p>
+                    <p id="ai-scan-status"></p>
 
-                    <div class="flex items-start gap-3 mt-2">
-                        <img id="ai-scan-preview" class="w-24 h-24 object-cover rounded border hidden"
-                            alt="Selected crop photo preview" />
-                        <div class="flex-1">
-                            <p class="text-sm font-medium">Result</p>
-                            <p id="ai-scan-result" class="text-sm"></p>
-                        </div>
-                    </div>
+                    <img id="ai-scan-preview" class="hidden" alt="Preview" />
+                    <div id="ai-scan-result"></div>
                 </div>
             </section>
 
             <!-- Profile -->
             <section id="profile-view" class="hidden">
-                <h2>Profile</h2>
+                <h2 data-i18n="profileTitle">Profile</h2>
 
                 <!-- Profile Picture Section -->
                 <div id="profile-picture-section"
                     style="margin-bottom: 24px; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                    <h3>Profile Picture</h3>
+                    <h3 data-i18n="profilePicTitle">Profile Picture</h3>
                     <div style="display: flex; gap: 16px; align-items: flex-start;">
                         <div style="flex-shrink: 0;">
                             <img id="profile-picture"
                                 style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; background-color: #f0f0f0;"
                                 alt="Profile picture" />
                             <p id="no-picture-text"
-                                style="text-align: center; color: #999; font-size: 12px; margin-top: 8px;">No picture
+                                style="text-align: center; color: #999; font-size: 12px; margin-top: 8px;"
+                                data-i18n="noPicText">No picture
                             </p>
                         </div>
                         <div>
                             <input id="profile-picture-input" type="file" accept="image/*" style="display: none;" />
                             <button id="upload-picture-btn" type="button" class="btn btn-primary"
-                                style="margin-bottom: 8px;">
+                                style="margin-bottom: 8px;" data-i18n="uploadPicBtn">
                                 Upload Picture
                             </button>
-                            <button id="remove-picture-btn" type="button" class="btn btn-dark" style="display: none;">
+                            <button id="remove-picture-btn" type="button" class="btn btn-dark" style="display: none;"
+                                data-i18n="removePicBtn">
                                 Remove Picture
                             </button>
                             <p id="upload-status" style="font-size: 12px; color: #666; margin-top: 8px;"></p>
@@ -229,38 +381,40 @@
 
                 <!-- Profile Info Display -->
                 <div id="profile-display">
-                    <p>Name: <span id="profile-name"></span></p>
-                    <p>Email: <span id="profile-email"></span></p>
-                    <p>Phone: <span id="profile-phone"></span></p>
-                    <p>Bio: <span id="profile-bio"></span></p>
-                    <p>Created: <span id="profile-created"></span></p>
+                    <p><span data-i18n="nameLabel">Name:</span> <span id="profile-name"></span></p>
+                    <p><span data-i18n="emailLabel">Email:</span> <span id="profile-email"></span></p>
+                    <p><span data-i18n="phoneLabel">Phone:</span> <span id="profile-phone"></span></p>
+                    <p><span data-i18n="bioLabel">Bio:</span> <span id="profile-bio"></span></p>
+                    <p><span data-i18n="createdLabel">Created:</span> <span id="profile-created"></span></p>
                 </div>
 
-                <h3>Edit profile</h3>
+                <h3 data-i18n="editProfileTitle">Edit profile</h3>
                 <form id="profile-form">
-                    <input id="edit-name" placeholder="Name" />
-                    <textarea id="edit-bio" placeholder="Short bio"></textarea>
-                    <button type="submit">Save profile</button>
+                    <input id="edit-name" data-i18n-placeholder="namePlaceholder" placeholder="Name" />
+                    <textarea id="edit-bio" data-i18n-placeholder="bioPlaceholder" placeholder="Short bio"></textarea>
+                    <button type="submit" data-i18n="saveProfileBtn">Save profile</button>
                 </form>
 
-                <h3>Update phone number</h3>
+                <h3 data-i18n="updatePhoneTitle">Update phone number</h3>
                 <div id="phone-update-section"
                     style="margin-bottom: 24px; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px;">
-                    <p style="font-size: 14px; color: #666; margin-bottom: 12px;">
+                    <p style="font-size: 14px; color: #666; margin-bottom: 12px;" data-i18n="otpInfo">
                         For security, we'll send an OTP to verify your new phone number.
                     </p>
                     <div id="phone-update-form">
-                        <input id="new-phone-number" type="tel" placeholder="+8801XXXXXXXXX"
-                            style="margin-bottom: 8px; width: 100%;" />
+                        <input id="new-phone-number" type="tel" data-i18n-placeholder="phoneInputPlaceholder"
+                            placeholder="+8801XXXXXXXXX" style="margin-bottom: 8px; width: 100%;" />
                         <button id="send-phone-otp-btn" type="button" class="btn btn-primary"
-                            style="margin-bottom: 8px;">
+                            style="margin-bottom: 8px;" data-i18n="sendOtpBtn">
                             Send OTP
                         </button>
 
                         <div id="otp-verification-section" class="hidden" style="margin-top: 12px;">
-                            <input id="phone-otp-code" type="text" placeholder="Enter 6-digit OTP" maxlength="6"
+                            <input id="phone-otp-code" type="text" data-i18n-placeholder="otpPlaceholder"
+                                placeholder="Enter 6-digit OTP" maxlength="6"
                                 style="margin-bottom: 8px; width: 100%;" />
-                            <button id="verify-phone-otp-btn" type="button" class="btn btn-primary">
+                            <button id="verify-phone-otp-btn" type="button" class="btn btn-primary"
+                                data-i18n="verifyOtpBtn">
                                 Verify OTP & Update Phone
                             </button>
                         </div>
@@ -270,11 +424,13 @@
                     </div>
                 </div>
 
-                <h3>Change password</h3>
+                <h3 data-i18n="changePwdTitle">Change password</h3>
                 <form id="password-form">
-                    <input id="current-password" type="password" placeholder="Current password" required />
-                    <input id="new-password" type="password" placeholder="New password" required />
-                    <button type="submit">Update password</button>
+                    <input id="current-password" type="password" data-i18n-placeholder="currentPwdPlaceholder"
+                        placeholder="Current password" required />
+                    <input id="new-password" type="password" data-i18n-placeholder="newPwdPlaceholder"
+                        placeholder="New password" required />
+                    <button type="submit" data-i18n="updatePwdBtn">Update password</button>
                 </form>
             </section>
         </section>
@@ -283,7 +439,7 @@
 
     <script type="module" src="./src/firebase-config.js"></script>
     <script type="module" src="./src/config.js"></script>
-    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/app.js"></script>
 </body>
 
 </html>

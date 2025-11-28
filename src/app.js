@@ -101,7 +101,116 @@ const LANG = {
         lostStatus: "lost",
         mitigatedStatus: "mitigated",
         activeStatus: "active",
-        completedStatus: "completed"
+        completedStatus: "completed",
+        appTitle: "HarvestGuard",
+        loginTitle: "Login",
+        registerTitle: "Register",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        loginBtn: "Login",
+        registerBtn: "Register",
+        switchToRegister: "No account? Register",
+        switchToLogin: "Have an account? Login",
+        dashboardTitle: "Dashboard",
+        weatherTitle: "Weather",
+        aiScanTitle: "AI Scan",
+        profileTitle: "Profile",
+        activeBatches: "Active Batches",
+        completedBatches: "Completed Batches",
+        riskMitigated: "Risk Mitigated",
+        totalWeight: "Total Weight (kg)",
+        createBatchTitle: "Create New Batch",
+        cropLabel: "Crop",
+        weightLabel: "Weight (kg)",
+        dateLabel: "Date",
+        storageTypeLabel: "Storage Type",
+        locationInputLabel: "Location",
+        imageLabel: "Image (optional)",
+        createBtn: "Create",
+        badgesTitle: "Achievements",
+        alertsTitle: "Alerts",
+        highRiskDetected: "High moisture risk detected for:",
+        suggestedActions: "Suggested actions: dry, move to ventilated storage, treat with recommended method.",
+        acceptMitigationBtn: "Accept Mitigation",
+        ignoreAlertBtn: "Ignore alert",
+        storageLabel: "Storage Type",
+        locationLabel: "Location",
+        statusLabel: "Status",
+        markMitigatedBtn: "Mark Mitigated",
+        markLostBtn: "Mark Lost",
+        markCompletedBtn: "Mark Completed",
+        backToHome: "Back to home page",
+        emailPlaceholder: "Email",
+        passwordPlaceholder: "Password",
+        orGoogle: "Or Google Login",
+        googleLoginBtn: "Login with Google",
+        forgotPassword: "Forgot Password?",
+        createAccount: "Create account",
+        fullNamePlaceholder: "Full name",
+        phonePlaceholder: "Phone",
+        signUpBtn: "Sign up",
+        backToLogin: "Back to login",
+        navDashboard: "Dashboard",
+        navWeather: "Weather",
+        navAiScanner: "AI Scanner",
+        navProfile: "Profile",
+        navLogout: "Logout",
+        dashTitle: "Dashboard",
+        activeBatchesStat: "Active batches:",
+        completedBatchesStat: "Completed batches:",
+        mitigatedRisksStat: "Mitigated risks:",
+        totalWeightStat: "Total weight (kg):",
+        selectCropDefault: "Select crop type (optional)",
+        paddy: "Paddy",
+        rice: "Rice",
+        jute: "Jute",
+        wheat: "Wheat",
+        otherCrop: "Other (use text field below)",
+        cropPlaceholder: "Or enter custom crop type",
+        weightPlaceholder: "Weight (kg)",
+        dateTypeDefault: "Select date type",
+        harvestDate: "Harvest Date",
+        expiryDate: "Expiry Date",
+        transformationDate: "Transportation Date",
+        storageTypeDefault: "Select storage type",
+        juteBag: "Jute Bag Stack",
+        silo: "Silo",
+        openArea: "Open Area",
+        addBatchBtn: "Add batch",
+        activeBatchesTitle: "Active batches",
+        riskAlertsTitle: "Risk alerts",
+        exportDataTitle: "Export data",
+        exportBtn: "Export JSON + CSV",
+        selectAreaLabel: "Select Area:",
+        selectOptionDefault: "-- Select --",
+        selectAreaMsg: "Please select an area.",
+        scannerTitle: "🌱 AI Crop Doctor",
+        scannerSubtitle: "Take a photo or upload an image to instantly detect crop diseases with our advanced AI.",
+        uploadLabel: "Tap to Upload or Capture",
+        uploadSublabel: "Supports JPG, PNG",
+        analyzeBtn: "🔍 Analyze Health",
+        profilePicTitle: "Profile Picture",
+        noPicText: "No picture",
+        uploadPicBtn: "Upload Picture",
+        removePicBtn: "Remove Picture",
+        nameLabel: "Name:",
+        phoneLabel: "Phone:",
+        bioLabel: "Bio:",
+        createdLabel: "Created:",
+        editProfileTitle: "Edit profile",
+        namePlaceholder: "Name",
+        bioPlaceholder: "Short bio",
+        saveProfileBtn: "Save profile",
+        updatePhoneTitle: "Update phone number",
+        otpInfo: "For security, we'll send an OTP to verify your new phone number.",
+        phoneInputPlaceholder: "+8801XXXXXXXXX",
+        sendOtpBtn: "Send OTP",
+        otpPlaceholder: "Enter 6-digit OTP",
+        verifyOtpBtn: "Verify OTP & Update Phone",
+        changePwdTitle: "Change password",
+        currentPwdPlaceholder: "Current password",
+        newPwdPlaceholder: "New password",
+        updatePwdBtn: "Update password"
     },
     bn: {
         noBatches: "কোনো সক্রিয় ব্যাচ নেই।",
@@ -111,7 +220,116 @@ const LANG = {
         lostStatus: "নষ্ট",
         mitigatedStatus: "প্রতিরোধ করা হয়েছে",
         activeStatus: "সক্রিয়",
-        completedStatus: "সম্পন্ন"
+        completedStatus: "সম্পন্ন",
+        appTitle: "কৃষি রক্ষা",
+        loginTitle: "লগইন",
+        registerTitle: "নিবন্ধন",
+        emailLabel: "ইমেইল",
+        passwordLabel: "পাসওয়ার্ড",
+        loginBtn: "লগইন",
+        registerBtn: "নিবন্ধন করুন",
+        switchToRegister: "অ্যাকাউন্ট নেই? নিবন্ধন করুন",
+        switchToLogin: "অ্যাকাউন্ট আছে? লগইন করুন",
+        dashboardTitle: "ড্যাশবোর্ড",
+        weatherTitle: "আবহাওয়া",
+        aiScanTitle: "এআই স্ক্যান",
+        profileTitle: "প্রোফাইল",
+        activeBatches: "সক্রিয় ব্যাচ",
+        completedBatches: "সম্পন্ন ব্যাচ",
+        riskMitigated: "ঝুঁকি প্রশমিত",
+        totalWeight: "মোট ওজন (কেজি)",
+        createBatchTitle: "নতুন ব্যাচ তৈরি করুন",
+        cropLabel: "ফসল",
+        weightLabel: "ওজন (কেজি)",
+        dateLabel: "তারিখ",
+        storageTypeLabel: "সংরক্ষণাগারের ধরন",
+        locationInputLabel: "অবস্থান",
+        imageLabel: "ছবি (ঐচ্ছিক)",
+        createBtn: "তৈরি করুন",
+        badgesTitle: "অর্জনসমূহ",
+        alertsTitle: "সতর্কতা",
+        highRiskDetected: "উচ্চ আর্দ্রতার ঝুঁকি শনাক্ত হয়েছে:",
+        suggestedActions: "প্রস্তাবিত পদক্ষেপ: শুকানো, বায়ুচলাচল ব্যবস্থা উন্নত করা।",
+        acceptMitigationBtn: "প্রশমন গ্রহণ করুন",
+        ignoreAlertBtn: "সতর্কতা উপেক্ষা করুন",
+        storageLabel: "সংরক্ষণাগারের ধরন",
+        locationLabel: "অবস্থান",
+        statusLabel: "অবস্থা",
+        markMitigatedBtn: "প্রশমিত হিসেবে চিহ্নিত করুন",
+        markLostBtn: "নষ্ট হিসেবে চিহ্নিত করুন",
+        markCompletedBtn: "সম্পন্ন হিসেবে চিহ্নিত করুন",
+        backToHome: "হোম পেজে ফিরে যান",
+        emailPlaceholder: "ইমেইল",
+        passwordPlaceholder: "পাসওয়ার্ড",
+        orGoogle: "অথবা গুগল লগইন",
+        googleLoginBtn: "গুগল দিয়ে লগইন করুন",
+        forgotPassword: "পাসওয়ার্ড ভুলে গেছেন?",
+        createAccount: "অ্যাকাউন্ট তৈরি করুন",
+        fullNamePlaceholder: "পুরো নাম",
+        phonePlaceholder: "ফোন",
+        signUpBtn: "সাইন আপ",
+        backToLogin: "লগইন এ ফিরে যান",
+        navDashboard: "ড্যাশবোর্ড",
+        navWeather: "আবহাওয়া",
+        navAiScanner: "এআই স্ক্যানার",
+        navProfile: "প্রোফাইল",
+        navLogout: "লগআউট",
+        dashTitle: "ড্যাশবোর্ড",
+        activeBatchesStat: "সক্রিয় ব্যাচ:",
+        completedBatchesStat: "সম্পন্ন ব্যাচ:",
+        mitigatedRisksStat: "প্রশমিত ঝুঁকি:",
+        totalWeightStat: "মোট ওজন (কেজি):",
+        selectCropDefault: "ফসলের ধরন নির্বাচন করুন (ঐচ্ছিক)",
+        paddy: "ধান",
+        rice: "চাল",
+        jute: "পাট",
+        wheat: "গম",
+        otherCrop: "অন্যান্য (নিচে লিখুন)",
+        cropPlaceholder: "অথবা কাস্টম ফসলের ধরন লিখুন",
+        weightPlaceholder: "ওজন (কেজি)",
+        dateTypeDefault: "তারিখের ধরন নির্বাচন করুন",
+        harvestDate: "ফসল কাটার তারিখ",
+        expiryDate: "মেয়াদ উত্তীর্ণের তারিখ",
+        transformationDate: "পরিবহনের তারিখ",
+        storageTypeDefault: "স্টোরেজের ধরন নির্বাচন করুন",
+        juteBag: "পাটের বস্তার স্তূপ",
+        silo: "সাইলো",
+        openArea: "খোলা জায়গা",
+        addBatchBtn: "ব্যাচ যোগ করুন",
+        activeBatchesTitle: "সক্রিয় ব্যাচ",
+        riskAlertsTitle: "ঝুঁকির সতর্কতা",
+        exportDataTitle: "ডেটা রপ্তানি করুন",
+        exportBtn: "JSON + CSV রপ্তানি করুন",
+        selectAreaLabel: "এলাকা নির্বাচন করুন:",
+        selectOptionDefault: "-- নির্বাচন করুন --",
+        selectAreaMsg: "দয়া করে একটি এলাকা নির্বাচন করুন।",
+        scannerTitle: "🌱 এআই ক্রপ ডাক্তার",
+        scannerSubtitle: "আমাদের উন্নত এআই দিয়ে ফসলের রোগ সনাক্ত করতে একটি ছবি তুলুন বা আপলোড করুন।",
+        uploadLabel: "আপলোড বা ছবি তুলতে ট্যাপ করুন",
+        uploadSublabel: "JPG, PNG সমর্থিত",
+        analyzeBtn: "🔍 স্বাস্থ্য বিশ্লেষণ করুন",
+        profilePicTitle: "প্রোফাইল ছবি",
+        noPicText: "কোন ছবি নেই",
+        uploadPicBtn: "ছবি আপলোড করুন",
+        removePicBtn: "ছবি সরান",
+        nameLabel: "নাম:",
+        phoneLabel: "ফোন:",
+        bioLabel: "বায়ো:",
+        createdLabel: "তৈরি হয়েছে:",
+        editProfileTitle: "প্রোফাইল সম্পাদনা করুন",
+        namePlaceholder: "নাম",
+        bioPlaceholder: "সংক্ষিপ্ত বায়ো",
+        saveProfileBtn: "প্রোফাইল সংরক্ষণ করুন",
+        updatePhoneTitle: "ফোন নম্বর আপডেট করুন",
+        otpInfo: "নিরাপত্তার জন্য, আমরা আপনার নতুন ফোন নম্বর যাচাই করতে একটি ওটিপি পাঠাব।",
+        phoneInputPlaceholder: "+৮৮০১XXXXXXXXX",
+        sendOtpBtn: "ওটিপি পাঠান",
+        otpPlaceholder: "৬-সংখ্যার ওটিপি লিখুন",
+        verifyOtpBtn: "ওটিপি যাচাই এবং ফোন আপডেট করুন",
+        changePwdTitle: "পাসওয়ার্ড পরিবর্তন করুন",
+        currentPwdPlaceholder: "বর্তমান পাসওয়ার্ড",
+        newPwdPlaceholder: "নতুন পাসওয়ার্ড",
+        updatePwdBtn: "পাসওয়ার্ড আপডেট করুন"
     }
 };
 
@@ -146,8 +364,30 @@ function loadLanguagePreference(user) {
 function applyLanguage() {
     const l = LANG[currentLang];
     if (!l) return;
-    noBatchesMsg.textContent = l.noBatches;
-    noBadgesMsg.textContent = l.noBadges;
+
+    // Update elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (l[key]) {
+            el.textContent = l[key];
+        }
+    });
+
+    // Update elements with data-i18n-placeholder attribute
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (l[key]) {
+            el.placeholder = l[key];
+        }
+    });
+
+    // Update specific elements that might not have data-i18n but are handled manually
+    if (noBatchesMsg) noBatchesMsg.textContent = l.noBatches;
+    if (noBadgesMsg) noBadgesMsg.textContent = l.noBadges;
+
+    // Re-render batches to update their internal text
+    renderBatches();
+
     localStorage.setItem("hg_lang", currentLang);
 }
 
@@ -651,24 +891,98 @@ function renderBatches() {
         noBatchesMsg.classList.add("hidden");
     }
     active.forEach((batch, idx) => {
+        const l = LANG[currentLang];
+        const statusKey = batch.status + "Status";
+        const statusText = l[statusKey] || batch.status;
+
+        // Date formatting
+        let dateStr = batch.harvestDate;
+        try {
+            if (dateStr) {
+                dateStr = new Date(dateStr).toLocaleDateString(currentLang === 'bn' ? 'bn-BD' : 'en-US');
+            }
+        } catch (e) { }
+
+        // Status badge styling
+        let statusBadgeClass = "status-badge";
+        let statusIcon = "●";
+        if (batch.status === "active") {
+            statusBadgeClass += " status-active";
+            statusIcon = "✓";
+        } else if (batch.status === "mitigated") {
+            statusBadgeClass += " status-mitigated";
+            statusIcon = "🛡️";
+        } else if (batch.status === "lost") {
+            statusBadgeClass += " status-lost";
+            statusIcon = "⚠️";
+        } else if (batch.status === "completed") {
+            statusBadgeClass += " status-completed";
+            statusIcon = "✔️";
+        }
+
         const div = document.createElement("div");
         div.className = "batch-card";
+        // Add status-specific class to the card
+        if (batch.status === "lost") {
+            div.classList.add("batch-card-lost");
+        } else if (batch.status === "mitigated") {
+            div.classList.add("batch-card-mitigated");
+        }
+
+        // Action buttons HTML - show different buttons based on status
+        let actionButtons = '';
+        if (batch.status === "active") {
+            actionButtons = `
+                <div class="batch-actions">
+                    <button data-idx="${idx}" class="btn-mitigate">🛡️ ${l.markMitigatedBtn || "Mark Mitigated"}</button>
+                    <button data-idx="${idx}" class="btn-lost">⚠️ ${l.markLostBtn || "Mark Lost"}</button>
+                    <button data-idx="${idx}" class="complete-btn">${l.markCompletedBtn || "Mark Completed"}</button>
+                </div>
+            `;
+        } else {
+            // For mitigated or lost batches, only show complete button
+            actionButtons = `
+                <div class="batch-actions">
+                    <button data-idx="${idx}" class="complete-btn">${l.markCompletedBtn || "Mark Completed"}</button>
+                </div>
+            `;
+        }
+
         div.innerHTML = `
-      <p><strong>${batch.crop}</strong> (${batch.weight} kg)</p>
-      <p>Date: ${batch.harvestDate}</p>
-      <p>Storage: ${batch.storageType}</p>
-      <p>Location: ${batch.location}</p>
-      <p>Status: ${batch.status}</p>
+      <div class="batch-header">
+        <p><strong>${batch.crop || "Unknown Crop"}</strong> <span class="batch-weight">(${batch.weight || 0} kg)</span></p>
+        <span class="${statusBadgeClass}">${statusIcon} ${statusText}</span>
+      </div>
+      <div class="batch-details">
+        <p><strong>${l.harvestDate || "Date"}:</strong> ${dateStr}</p>
+        <p><strong>${l.storageLabel || "Storage"}:</strong> ${batch.storageType || "N/A"}</p>
+        <p><strong>${l.locationLabel || "Location"}:</strong> ${batch.location || "N/A"}</p>
+      </div>
       ${batch.imageUrl ? `<img src="${batch.imageUrl}" class="batch-img" />` : ""}
-      <button data-idx="${idx}" class="complete-btn">Mark completed</button>
+      ${actionButtons}
     `;
         activeBatchesDiv.appendChild(div);
     });
 
+    // Add event listeners for all action buttons
     activeBatchesDiv.querySelectorAll(".complete-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const idx = parseInt(btn.getAttribute("data-idx"), 10);
             markBatchCompleted(idx);
+        });
+    });
+
+    activeBatchesDiv.querySelectorAll(".btn-mitigate").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const idx = parseInt(btn.getAttribute("data-idx"), 10);
+            markBatchMitigated(idx);
+        });
+    });
+
+    activeBatchesDiv.querySelectorAll(".btn-lost").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const idx = parseInt(btn.getAttribute("data-idx"), 10);
+            markBatchLost(idx);
         });
     });
 
@@ -810,13 +1124,14 @@ function renderAlerts() {
     alertsContainer.innerHTML = "";
     const highRisk = batchesCache.filter(b => b.riskStatus === "high" && b.status === "active");
     highRisk.forEach((batch, idx) => {
+        const l = LANG[currentLang];
         const div = document.createElement("div");
         div.className = "alert-card";
         div.innerHTML = `
-      <p>High moisture risk detected for ${batch.crop} at ${batch.location}.</p>
-      <p>Suggested actions: dry, move to ventilated storage, treat with recommended method.</p>
-      <button data-idx="${idx}" class="mitigate-btn">Accept mitigation</button>
-      <button data-idx="${idx}" class="ignore-btn">Ignore alert</button>
+      <p>${l.highRiskDetected || "High moisture risk detected for"} ${batch.crop} at ${batch.location}.</p>
+      <p>${l.suggestedActions || "Suggested actions: dry, move to ventilated storage, treat with recommended method."}</p>
+      <button data-idx="${idx}" class="mitigate-btn">${l.acceptMitigationBtn || "Accept mitigation"}</button>
+      <button data-idx="${idx}" class="ignore-btn">${l.ignoreAlertBtn || "Ignore alert"}</button>
     `;
         alertsContainer.appendChild(div);
     });
@@ -881,18 +1196,8 @@ exportBtn.addEventListener("click", () => {
     downloadFile(`harvestguard-${currentUser.uid}.csv`, csv, "text/csv");
 });
 
-function batchesToCsv(batches) {
-    const headers = ["crop", "weight", "harvestDate", "storageType", "location", "status", "riskStatus", "createdAt"];
-    const lines = [headers.join(",")];
-    batches.forEach(b => {
-        const row = headers.map(h => JSON.stringify(b[h] ?? ""));
-        lines.push(row.join(","));
-    });
-    return lines.join("\n");
-}
-
-function downloadFile(filename, content, mime) {
-    const blob = new Blob([content], { type: mime });
+function downloadFile(filename, content, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -903,8 +1208,77 @@ function downloadFile(filename, content, mime) {
     URL.revokeObjectURL(url);
 }
 
+function batchesToCsv(batches) {
+    if (!batches.length) return "";
+    const headers = Object.keys(batches[0]).join(",");
+    const rows = batches.map(b => Object.values(b).join(","));
+    return [headers, ...rows].join("\n");
+}
+
+// District/Location options (matching weather module)
+const DISTRICT_OPTIONS = [
+    "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Sylhet",
+    "Barisal", "Rangpur", "Mymensingh", "Cumilla", "Gazipur",
+    "Narayanganj", "Bogura", "Pabna", "Jessore", "Cox's Bazar"
+];
+
+// Populate location dropdown
+function populateLocationDropdown() {
+    const locationSelect = document.getElementById("batch-location");
+    if (!locationSelect) return;
+
+    // Clear existing options except the first one
+    locationSelect.innerHTML = '<option value="">Select location</option>';
+
+    // Add district options
+    DISTRICT_OPTIONS.sort().forEach(district => {
+        const option = document.createElement("option");
+        option.value = district;
+        option.textContent = district;
+        locationSelect.appendChild(option);
+    });
+}
+
+// Mark batch as mitigated
+function markBatchMitigated(idx) {
+    const activeBatches = batchesCache.filter(b => b.status === "active" || b.status === "mitigated" || b.status === "lost");
+    const batch = activeBatches[idx];
+    if (!batch) return;
+
+    batch.status = "mitigated";
+    batch.riskStatus = "mitigated";
+    saveLocalBatches();
+    renderBatches();
+    awardRiskMitigatedBadge();
+
+    if (navigator.onLine) {
+        updateBatchStatusRemoteByFields(batch);
+    } else {
+        enqueueOperation({ type: "updateBatchStatus", data: { id: batch.id || null, status: "mitigated", riskStatus: "mitigated" } });
+    }
+}
+
+// Mark batch as lost
+function markBatchLost(idx) {
+    const activeBatches = batchesCache.filter(b => b.status === "active" || b.status === "mitigated" || b.status === "lost");
+    const batch = activeBatches[idx];
+    if (!batch) return;
+
+    batch.status = "lost";
+    batch.riskStatus = "lost";
+    saveLocalBatches();
+    renderBatches();
+
+    if (navigator.onLine) {
+        updateBatchStatusRemoteByFields(batch);
+    } else {
+        enqueueOperation({ type: "updateBatchStatus", data: { id: batch.id || null, status: "lost", riskStatus: "lost" } });
+    }
+}
+
 // Initialization
 async function initUserData() {
+    populateLocationDropdown();
     loadLocalBatches();
     renderBatches();
     await loadProfile();

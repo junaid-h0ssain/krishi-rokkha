@@ -63,28 +63,36 @@ export function initAiScanner() {
             if (!res.ok) throw new Error("Roboflow error: " + (data.message || res.status));
 
             let label = "";
+            let confidence = 0;
             if (data.predictions && Array.isArray(data.predictions) && data.predictions.length > 0) {
                 // Find prediction with highest confidence
                 const topPrediction = data.predictions.reduce((prev, current) => {
                     return (prev.confidence > current.confidence) ? prev : current;
                 });
-                label = topPrediction.class.toLowerCase();
+                label = topPrediction.class;
+                confidence = topPrediction.confidence;
             } else {
-                label = data.label?.toLowerCase?.() || data.result?.toLowerCase?.() || "";
+                label = data.label || data.result || "Unknown";
+                confidence = data.confidence || 0;
             }
 
             const status = interpretLabel(label);
-            resultEl.textContent = status.messageBn;
 
-            // Style the output
-            resultEl.style.fontSize = "1.5rem";
-            resultEl.style.fontWeight = "bold";
+            // Display result with enhanced details
+            resultEl.innerHTML = `
+                <span style="font-size: 1.5rem; font-weight: bold;">${label}</span><br>
+                <span style="font-size: 1rem;">Confidence: ${(confidence * 100).toFixed(1)}%</span><br>
+                <span style="font-size: 1.2rem; font-weight: bold;">${status.messageBn}</span>
+            `;
+
             resultEl.style.marginTop = "10px";
 
             if (status.healthStatus === "rotten") {
                 resultEl.style.color = "#d32f2f"; // Red
-            } else {
+            } else if (status.healthStatus === "fresh") {
                 resultEl.style.color = "#2e7d32"; // Green
+            } else {
+                resultEl.style.color = "#f57c00"; // Orange
             }
 
             statusEl.textContent = "";
@@ -106,14 +114,25 @@ function fileToBase64(file) {
 }
 
 function interpretLabel(label) {
-    if (label.includes("rot") || label.includes("mold") || label.includes("unhealthy") || label.includes("sick") || label.includes("disease") || label.includes("blight")) {
+    const lower = label.toLowerCase();
+    if (lower.includes("healthy") || lower.includes("fresh")) {
         return {
-            healthStatus: "rotten",
-            messageBn: "ফসল নষ্ট হতে পারে, দ্রুত শুকান ও আলাদা রাখুন।"
+            healthStatus: "fresh",
+            messageBn: "ফসল সুস্থ আছে।"
         };
     }
+
+    const diseaseKeywords = ["rot", "mold", "unhealthy", "sick", "disease", "blight", "scab", "rust", "spot", "mildew", "fungus", "virus", "wilt", "yellow", "curl", "mosaic", "burn"];
+
+    if (diseaseKeywords.some(k => lower.includes(k))) {
+        return {
+            healthStatus: "rotten",
+            messageBn: "রোগ শনাক্ত হয়েছে। দ্রুত ব্যবস্থা নিন।"
+        };
+    }
+
     return {
-        healthStatus: "fresh",
-        messageBn: "ফসল দেখতে সুস্থ।"
+        healthStatus: "unknown",
+        messageBn: "ফসলটি পর্যবেক্ষণ করুন।"
     };
 }

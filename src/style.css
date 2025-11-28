@@ -1,5 +1,5 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     background: #f5f5f5;
 }
@@ -18,11 +18,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #2f855a;
+    background: linear-gradient(135deg, #2f855a 0%, #22543d 100%);
     color: white;
     padding: 1rem 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
 }
 
 #app-title {
@@ -44,11 +45,12 @@ body {
 #top-nav button {
     background: rgba(255, 255, 255, 0.2);
     color: white;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
 #top-nav button:hover {
     background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
 }
 
 #top-nav select {
@@ -60,10 +62,10 @@ body {
 #register-card {
     max-width: 400px;
     margin: 2rem auto;
-    padding: 1rem;
+    padding: 2rem;
     background: white;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 form input,
@@ -77,31 +79,273 @@ form button {
     box-sizing: border-box;
 }
 
+/* Enhanced Analytics Section */
 #analytics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 #analytics>div {
-    background: white;
-    padding: 0.5rem;
-    border-radius: 4px;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%);
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(47, 133, 90, 0.1);
+    transition: all 0.3s ease;
 }
 
+#analytics>div:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+    border-color: rgba(47, 133, 90, 0.3);
+}
+
+#analytics>div span:first-child {
+    display: block;
+    font-size: 0.85rem;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#analytics>div span:last-child {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2f855a;
+    line-height: 1;
+}
+
+/* Enhanced Batch and Alert Cards */
 .batch-card,
 .alert-card {
-    background: white;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 4px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    margin-bottom: 1.2rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.batch-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+    border-color: rgba(47, 133, 90, 0.2);
+}
+
+.batch-card p {
+    margin: 0.6rem 0;
+    font-size: 0.95rem;
+    color: #2d3748;
+    line-height: 1.6;
+}
+
+.batch-card p strong {
+    color: #1a202c;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.batch-card .complete-btn {
+    margin-top: 1rem;
+    padding: 0.7rem 1.2rem;
+    background: linear-gradient(135deg, #2f855a 0%, #22543d 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(47, 133, 90, 0.2);
+}
+
+.batch-card .complete-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(47, 133, 90, 0.3);
+    background: linear-gradient(135deg, #22543d 0%, #1a3d2e 100%);
+}
+
+.alert-card {
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+    border-left: 4px solid #e53e3e;
+}
+
+.alert-card p {
+    margin: 0.5rem 0;
+    color: #742a2a;
+}
+
+.alert-card button {
+    margin-top: 0.8rem;
+    margin-right: 0.5rem;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.alert-card .mitigate-btn {
+    background: #48bb78;
+    color: white;
+}
+
+.alert-card .mitigate-btn:hover {
+    background: #38a169;
+    transform: translateY(-1px);
+}
+
+.alert-card .ignore-btn {
+    background: #cbd5e0;
+    color: #2d3748;
+}
+
+.alert-card .ignore-btn:hover {
+    background: #a0aec0;
+    transform: translateY(-1px);
 }
 
 .batch-img {
-    max-width: 400px;
+    max-width: 100%;
+    width: 400px;
+    height: auto;
     display: block;
-    margin: 0.5rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.batch-img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
+}
+
+.status-mitigated {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.3);
+}
+
+.status-lost {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(245, 101, 101, 0.3);
+}
+
+.status-completed {
+    background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(159, 122, 234, 0.3);
+}
+
+/* Batch Card Header and Details */
+.batch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.batch-header p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.batch-weight {
+    color: #718096;
+    font-weight: 600;
+}
+
+.batch-details {
+    margin-bottom: 1rem;
+}
+
+.batch-details p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.batch-details p strong {
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Status-specific card backgrounds */
+.batch-card-lost {
+    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+    border-left: 4px solid #e53e3e;
+}
+
+.batch-card-mitigated {
+    background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+    border-left: 4px solid #4299e1;
+}
+
+/* Action Buttons */
+.batch-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-mitigate,
+.btn-lost {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-mitigate {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+}
+
+.btn-mitigate:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
+.btn-lost {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+    color: white;
+}
+
+.btn-lost:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(245, 101, 101, 0.3);
 }
 
 /* Navbar Styles from welcome.html */
@@ -121,7 +365,6 @@ form button {
     margin-bottom: 20px;
     padding: 20px;
     background-color: var(--bg);
-    /* Added background for visibility on other pages */
     color: var(--text);
 }
 
@@ -156,7 +399,7 @@ form button {
     text-decoration: none;
 }
 
-.link-btn{
+.link-btn {
     width: auto;
 }
 
