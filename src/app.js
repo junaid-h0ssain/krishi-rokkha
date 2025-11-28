@@ -67,6 +67,23 @@ const passwordForm = document.getElementById("password-form");
 
 const languageSelect = document.getElementById("language-select");
 
+// Crop type dropdown handler
+const batchCropSelect = document.getElementById("batch-crop-select");
+const batchCropInput = document.getElementById("batch-crop");
+
+if (batchCropSelect && batchCropInput) {
+    batchCropSelect.addEventListener("change", () => {
+        const selectedValue = batchCropSelect.value;
+        if (selectedValue && selectedValue !== "Other") {
+            batchCropInput.value = selectedValue;
+        } else if (selectedValue === "Other") {
+            batchCropInput.value = "";
+            batchCropInput.focus();
+        }
+    });
+}
+
+
 // Offline queue key
 const QUEUE_KEY = "hg_sync_queue";
 const LOCAL_BATCHES_KEY = "hg_local_batches";
