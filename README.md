@@ -93,3 +93,7 @@ krishi-rokkha/
 
 
 
+# Team Members
+- Fardina Tahsin (Full Stack)
+- Sujit Mohajon (Full Stack)
+- Junaid Hossain (Backend)
