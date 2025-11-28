@@ -1,5 +1,5 @@
 {
-  "name": "krishi-rokkha",
+  "name": "perplex1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "three": "^0.181.2"
   }
 }
