@@ -3,7 +3,6 @@
 **Krishi Rokkha** (HarvestGuard) is a comprehensive web application designed to empower farmers with modern technology. It combines AI-driven crop disease detection, real-time weather risk assessment, and efficient batch management to help farmers maximize their yield and protect their crops.
 
 ![Project Status](https://img.shields.io/badge/Status-In%20Development-orange)
-![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## ✨ Features
 
@@ -102,6 +101,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4.  Push to the branch (`git push origin feature/AmazingFeature`)
 5.  Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License.
+# Team Members
+- Fardina Tahsin (Front End)
+- Sujit Mohajon (Full Stack)
+- Junaid Hossain (Backend)
