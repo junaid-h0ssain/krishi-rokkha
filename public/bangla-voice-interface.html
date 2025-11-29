@@ -16,7 +16,10 @@
         .examples { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:12px }
         .example { background:#f0f0f0; padding:8px 12px; border-radius:6px; cursor:pointer }
         .answer { margin-top: 18px; font-size:1.15em; color:#145c2b }
+        .answer.speaking { animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .hint { margin-top: 8px; color:#666 }
+        .speaker-icon { cursor: pointer; font-size: 1.2em; margin-left: 8px; }
         input[type="text"] { padding:8px; width:60%; max-width:420px }
         @media (max-width:480px){ input[type="text"]{ width:100% } }
         .lang-toggle { margin: 10px 0; }
@@ -75,7 +78,8 @@
     </div>
 
     <div class="question" id="question">আপনার প্রশ্ন এখানে দেখানো হবে।</div>
-    <div class="answer" id="answer">উত্তর এখানে দেখানো হবে।</div>
+    <div class="answer" id="answer">উত্তর এখানে দেখানো হবে। <span class="speaker-icon" id="replay-btn" title="আবার শুনুন">🔊</span></div>
+    <div id="last-answer" style="display:none;"></div>
 
     <div style="margin-top:18px">
         <div class="hint">ফলাফল শুনতে না পারলে ব্রাউজারে মাইক্রোফোন অনুমতি দিন এবং Chrome/Edge ব্যবহার করুন।</div>
@@ -246,7 +250,8 @@
                     'Sorry, I didn\'t quite understand. Please try again or use the text input below.';
                 questionEl.textContent = qLabel + spoken;
                 const ans = findAnswer(spoken) || noMatch;
-                answerEl.textContent = aLabel + ans;
+                answerEl.innerHTML = aLabel + ans + ' <span class="speaker-icon" id="replay-btn" title="আবার শুনুন">🔊</span>';
+                document.getElementById('last-answer').textContent = ans;
                 speak(ans);
             });
 
@@ -313,7 +318,8 @@
                     'Sorry, I didn\'t understand.';
                 questionEl.textContent = qLabel + text;
                 const ans = findAnswer(text) || noMatch;
-                answerEl.textContent = aLabel + ans;
+                answerEl.innerHTML = aLabel + ans + ' <span class="speaker-icon" id="replay-btn" title="আবার শুনুন">🔊</span>';
+                document.getElementById('last-answer').textContent = ans;
                 speak(ans);
             }
         });
@@ -328,28 +334,87 @@
                 'Sorry, I didn\'t understand that question.';
             questionEl.textContent = qLabel + txt;
             const ans = findAnswer(txt) || noMatch;
-            answerEl.textContent = aLabel + ans;
+            answerEl.innerHTML = aLabel + ans + ' <span class="speaker-icon" id="replay-btn" title="আবার শুনুন">🔊</span>';
+            document.getElementById('last-answer').textContent = ans;
             speak(ans);
         });
+        
+        // Replay button handler (use event delegation since button is dynamic)
+        document.addEventListener('click', (ev) => {
+            if(ev.target.id === 'replay-btn' || ev.target.classList.contains('speaker-icon')) {
+                const lastAns = document.getElementById('last-answer').textContent;
+                if(lastAns) {
+                    speak(lastAns);
+                }
+            }
+        });
+
+        // Store voices globally once loaded
+        let availableVoices = [];
+        
+        function loadVoices() {
+            availableVoices = synth ? synth.getVoices() : [];
+            console.log('Voices loaded:', availableVoices.length);
+        }
+        
+        // Load voices on page load and when they change
+        if (synth) {
+            loadVoices();
+            if (synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = loadVoices;
+            }
+        }
 
         function speak(text){
-            if(!synth) return;
+            if(!synth) {
+                console.warn('Speech synthesis not available');
+                return;
+            }
+            
+            // Cancel any ongoing speech
+            synth.cancel();
+            
             const utt = new SpeechSynthesisUtterance(text);
             utt.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
-            // try to pick appropriate voice
-            const voices = synth.getVoices();
+            utt.rate = 0.9;
+            utt.pitch = 1;
+            utt.volume = 1;
+            
+            // Try to pick appropriate voice
+            const voices = availableVoices.length ? availableVoices : synth.getVoices();
             if(voices && voices.length){
                 let voice;
                 if(currentLang === 'bn') {
-                    voice = voices.find(v=> /bengali|bangla|bn[-_]?bd|বাংলা/i.test(v.name+v.lang));
+                    // Try Bengali/Bangla voices only - strict matching
+                    voice = voices.find(v=> /bn[-_]bd/i.test(v.lang));
+                    if(!voice) voice = voices.find(v=> /bengali|bangla|বাংলা/i.test(v.name));
+                    if(!voice) voice = voices.find(v=> v.lang && v.lang.startsWith('bn'));
+                    // No fallback to other languages - let browser handle with bn-BD lang tag
                 } else {
-                    voice = voices.find(v=> /en[-_]?us|english.*us/i.test(v.name+v.lang)) || 
-                           voices.find(v=> /english/i.test(v.name));
+                    voice = voices.find(v=> /en[-_]?us/i.test(v.lang)) || 
+                           voices.find(v=> /english.*us/i.test(v.name)) ||
+                           voices.find(v=> v.lang && v.lang.startsWith('en'));
                 }
-                if(voice) utt.voice = voice;
+                if(voice) {
+                    utt.voice = voice;
+                    console.log('Using voice:', voice.name, voice.lang);
+                } else {
+                    console.log('No matching voice found, using default with lang:', utt.lang);
+                }
             }
-            synth.cancel();
-            synth.speak(utt);
+            
+            // Debug: log speech attempt
+            console.log('Speaking:', text.substring(0, 50) + '...');
+            
+            // Handle speech events for debugging
+            utt.onstart = () => console.log('Speech started');
+            utt.onend = () => console.log('Speech ended');
+            utt.onerror = (e) => console.error('Speech error:', e.error);
+            
+            // Small delay to ensure synthesis is ready
+            setTimeout(() => {
+                synth.speak(utt);
+            }, 100);
         }
         
         // Language switching handlers
