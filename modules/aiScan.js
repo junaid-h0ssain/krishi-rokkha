@@ -1,10 +1,13 @@
 import { RF_CONFIG } from "../src/config.js";
+import { identifyPestWithRAG, getRiskColor, formatTreatmentPlan } from "./ragService.js";
 
 export function initAiScanner() {
     const fileInput = document.getElementById("ai-scan-input");
     const scanButton = document.getElementById("ai-scan-button");
+    const ragButton = document.getElementById("ai-rag-button");
     const statusEl = document.getElementById("ai-scan-status");
     const resultEl = document.getElementById("ai-scan-result");
+    const ragResultEl = document.getElementById("ai-rag-result");
     const previewEl = document.getElementById("ai-scan-preview");
 
     let selectedFile = null;
@@ -16,6 +19,7 @@ export function initAiScanner() {
         const file = fileInput.files[0];
         selectedFile = file;
         resultEl.textContent = "";
+        if (ragResultEl) ragResultEl.innerHTML = "";
         statusEl.textContent = "";
         if (file) {
             const reader = new FileReader();
@@ -30,6 +34,7 @@ export function initAiScanner() {
         }
     });
 
+    // Roboflow scan button
     scanButton.addEventListener("click", async () => {
         const file = selectedFile || fileInput.files[0];
         if (!file) {
@@ -102,6 +107,103 @@ export function initAiScanner() {
             console.error("[AI SCAN] ERROR:", err);
         }
     });
+
+    // RAG-based treatment plan button
+    if (ragButton && ragResultEl) {
+        ragButton.addEventListener("click", async () => {
+            const file = selectedFile || fileInput.files[0];
+            if (!file) {
+                ragResultEl.innerHTML = '<p style="color: #d32f2f;">প্রথমে একটি ছবি আপলোড করুন।</p>';
+                return;
+            }
+
+            ragResultEl.innerHTML = "";
+            statusEl.textContent = "তথ্য যাচাই করা হচ্ছে… অনুগ্রহ করে অপেক্ষা করুন...";
+            ragButton.disabled = true;
+
+            try {
+                // Get user's location from profile if available
+                const division = localStorage.getItem('userDivision') || '';
+                const district = localStorage.getItem('userDistrict') || '';
+                const language = localStorage.getItem('language') || 'bn';
+
+                const result = await identifyPestWithRAG(file, {
+                    division,
+                    district,
+                    language
+                });
+
+                if (result.success) {
+                    const riskColor = getRiskColor(result.risk);
+                    const formattedPlan = formatTreatmentPlan(result.treatmentPlan);
+                    const formattedPrevention = formatTreatmentPlan(result.prevention);
+
+                    ragResultEl.innerHTML = `
+                        <div style="background: #f7f7f7; padding: 16px; border-radius: 8px; margin-top: 16px;">
+                            <h3 style="margin-top: 0; color: #333;">🔍 শনাক্তকরণ ফলাফল</h3>
+                            
+                            <div style="margin-bottom: 12px;">
+                                <strong>পোকা/রোগ:</strong> 
+                                <span style="font-size: 1.2rem; color: ${riskColor};">${result.pest}</span>
+                            </div>
+                            
+                            <div style="margin-bottom: 12px;">
+                                <strong>ঝুঁকির স্তর:</strong> 
+                                <span style="font-size: 1.1rem; font-weight: bold; color: ${riskColor};">${result.risk}</span>
+                            </div>
+                            
+                            ${result.confidence ? `
+                                <div style="margin-bottom: 12px;">
+                                    <strong>নিশ্চয়তা:</strong> ${result.confidence}%
+                                </div>
+                            ` : ''}
+                            
+                            <hr style="border: none; border-top: 1px solid #ddd; margin: 16px 0;">
+                            
+                            <h4 style="color: #2e7d32; margin-bottom: 8px;">💊 চিকিৎসা পরিকল্পনা</h4>
+                            <div style="line-height: 1.6; color: #333;">
+                                ${formattedPlan}
+                            </div>
+                            
+                            ${formattedPrevention ? `
+                                <hr style="border: none; border-top: 1px solid #ddd; margin: 16px 0;">
+                                <h4 style="color: #1976d2; margin-bottom: 8px;">🛡️ প্রতিরোধমূলক ব্যবস্থা</h4>
+                                <div style="line-height: 1.6; color: #333;">
+                                    ${formattedPrevention}
+                                </div>
+                            ` : ''}
+                            
+                            ${result.sources && result.sources.length > 0 ? `
+                                <hr style="border: none; border-top: 1px solid #ddd; margin: 16px 0;">
+                                <h4 style="color: #666; margin-bottom: 8px;">📚 তথ্যসূত্র</h4>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    ${result.sources.map(src => `<li><a href="${src}" target="_blank" style="color: #1976d2;">${src}</a></li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </div>
+                    `;
+                } else {
+                    ragResultEl.innerHTML = `
+                        <div style="background: #ffebee; padding: 16px; border-radius: 8px; margin-top: 16px; color: #c62828;">
+                            <strong>ত্রুটি:</strong> ${result.error || 'সেবাটি বর্তমানে উপলব্ধ নেই।'}
+                        </div>
+                    `;
+                }
+
+                statusEl.textContent = "";
+            } catch (err) {
+                ragResultEl.innerHTML = `
+                    <div style="background: #ffebee; padding: 16px; border-radius: 8px; margin-top: 16px; color: #c62828;">
+                        <strong>ত্রুটি:</strong> ${err.message}
+                    </div>
+                `;
+                statusEl.textContent = "";
+                console.error("[RAG] ERROR:", err);
+            } finally {
+                ragButton.disabled = false;
+            }
+        });
+    }
 }
 
 function fileToBase64(file) {
@@ -127,7 +229,7 @@ function interpretLabel(label) {
     if (diseaseKeywords.some(k => lower.includes(k))) {
         return {
             healthStatus: "rotten",
-            messageBn: "রোগ শনাক্ত হয়েছে। দ্রুত ব্যবস্থা নিন।"
+            messageBn: "রোগ শনাক্ত হয়েছে। দ্রুত ব্যবস্থা নিন।"
         };
     }
 

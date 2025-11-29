@@ -15,4 +15,13 @@ export default defineConfig({
     },
   },
   publicDir: 'public',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000', // Proxy API requests to the backend server
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
+    },
+  },
 });
