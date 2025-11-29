@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart AI Alert</title>
+  <link rel="stylesheet" href="public/css/smart_ai.css" />
+</head>
+
+<body>
+  <div class="smart-container">
+    <h2 class="title">🌾 স্মার্ট ঝুঁকি সতর্কতা</h2>
+
+    <!-- Crop -->
+    <label>ফসল নির্বাচন করুন:</label>
+    <select id="cropSelect">
+      <option value="">-- নির্বাচন করুন --</option>
+      <option value="Alu">আলু</option>
+      <option value="Dhan">ধান</option>
+      <option value="Gom">গম</option>
+      <option value="Peyaj">পেঁয়াজ</option>
+    </select>
+
+    <!-- Area -->
+    <label>এলাকা নির্বাচন করুন:</label>
+    <select id="areaSelect">
+      <option value="">-- এলাকা বাছাই করুন --</option>
+      <option value="Chittagong">চট্টগ্রাম</option>
+      <option value="Patiya">পটিয়া</option>
+      <option value="Rangunia">রাঙ্গুনিয়া</option>
+      <option value="Hathazari">হাটহাজারী</option>
+      <option value="Anwara">আনোয়ারা</option>
+      <option value="Fatikchhari">ফটিকছড়ি</option>
+      <option value="Boalkhali">বোয়ালখালী</option>
+    </select>
+
+    <button onclick="getWeatherAndRisk()">সতর্কতা দেখুন</button>
+
+    <div id="alertContainer"></div>
+  </div>
+
+  <!-- Load JS as module -->
+  <script type="module" src="public/js/ai_alert.js"></script>
+</body>
+</html>
