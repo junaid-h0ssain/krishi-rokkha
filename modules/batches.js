@@ -205,19 +205,35 @@ function renderBatches() {
         const card = document.createElement("div");
         card.className = "batch-card";
         const dateTypeLabel = b.dateType || "Harvest";
+
+        // Generate enhanced risk display
+        const riskBadgeHtml = generateRiskBadgeHtml(b);
+        const riskDetailsHtml = generateRiskDetailsHtml(b);
+
         card.innerHTML = `
-      <p><strong>${b.cropType}</strong> (${b.estimatedWeightKg} kg)</p>
-      <p>${dateTypeLabel} Date: ${formatDate(b.harvestDate)} – ${b.storageType}</p>
-      <p>Location: ${b.storageLocationFreeText}</p>
-      <p>Date Added: ${formatDateTime(b.createdAt)}</p>
-      <p>Status: ${b.status}${b.riskStatus ? " (" + b.riskStatus + ")" : ""}</p>
-      ${b.etclHours ? `<p>ETCL: ${b.etclHours} ঘন্টা</p>` : ""}
-      ${b.lastRiskSummaryBn ? `<p>${b.lastRiskSummaryBn}</p>` : ""}
-      ${b.imageUrl ? `<img src="${b.imageUrl}" class="batch-img" />` : ""}
-      ${b.cropHealthStatus ? `<p>স্বাস্থ্য: ${b.cropHealthStatus}</p>` : ""}
-      <button data-idx="${idx}" class="complete-btn">Complete</button>
-      <button data-idx="${idx}" class="mitigate-btn">Mitigate</button>
-      <button data-idx="${idx}" class="lose-btn">Mark Lost</button>
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+        <div>
+          <p><strong style="font-size: 1.1rem;">${b.cropType}</strong> <span style="color: #6b7280;">(${b.estimatedWeightKg} kg)</span></p>
+          <p style="font-size: 0.9rem; color: #6b7280;">${dateTypeLabel}: ${formatDate(b.harvestDate)} • ${b.storageType}</p>
+        </div>
+        ${riskBadgeHtml}
+      </div>
+      
+      ${riskDetailsHtml}
+      
+      ${b.imageUrl ? `<img src="${b.imageUrl}" alt="${b.cropType} batch image" class="batch-img" style="margin: 10px 0; max-width: 100%; border-radius: 8px;" />` : ""}
+      
+      ${b.cropHealthStatus ? `
+        <div style="padding: 8px; background: #f0fdf4; border-radius: 6px; margin: 10px 0; border-left: 3px solid #16a34a;">
+          <strong>স্বাস্থ্য স্ট্যাটাস:</strong> ${b.cropHealthStatus}
+        </div>
+      ` : ""}
+      
+      <div style="display: flex; gap: 8px; margin-top: 12px;">
+        <button data-idx="${idx}" class="complete-btn" style="flex: 1;">Complete</button>
+        <button data-idx="${idx}" class="mitigate-btn" style="flex: 1;">Mitigate</button>
+        <button data-idx="${idx}" class="lose-btn" style="flex: 1;">Mark Lost</button>
+      </div>
     `;
         list.appendChild(card);
     });
@@ -416,3 +432,127 @@ function updateLatestBatchHealth(status) {
 }
 
 export { updateLatestBatchHealth };
+
+// Helper functions for enhanced risk display
+function generateRiskBadgeHtml(batch) {
+    if (!batch.riskStatus || !batch.etclHours) {
+        return `<span style="background: #9ca3af; color: white; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">No Risk Data</span>`;
+    }
+
+    const riskColors = {
+        "high": "#dc2626",
+        "critical": "#dc2626",
+        "medium-high": "#ea580c",
+        "medium": "#f59e0b",
+        "low-medium": "#84cc16",
+        "low": "#16a34a"
+    };
+
+    const color = riskColors[batch.riskStatus] || "#9ca3af";
+    const levelText = batch.riskLevelText || batch.riskStatus.toUpperCase();
+
+    return `
+        <div style="text-align: right;">
+            <div style="background: ${color}; color: white; padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px;">
+                ${levelText}
+            </div>
+            <div style="font-size: 0.75rem; color: #6b7280;">
+                ETCL: ${batch.etclHours}h (${Math.floor(batch.etclHours / 24)}d ${batch.etclHours % 24}h)
+            </div>
+        </div>
+    `;
+}
+
+function generateRiskDetailsHtml(batch) {
+    if (!batch.riskStatus) {
+        return `
+            <div style="padding: 12px; background: #f3f4f6; border-radius: 8px; margin: 10px 0;">
+                <p style="color: #6b7280; font-size: 0.9rem; margin: 0;">⏳ Risk assessment pending. Weather data will update automatically.</p>
+            </div>
+        `;
+    }
+
+    const riskColors = {
+        "high": "#dc2626",
+        "critical": "#dc2626",
+        "medium-high": "#ea580c",
+        "medium": "#f59e0b",
+        "low-medium": "#84cc16",
+        "low": "#16a34a"
+    };
+
+    const bgColors = {
+        "high": "#fee2e2",
+        "critical": "#fee2e2",
+        "medium-high": "#ffedd5",
+        "medium": "#fef3c7",
+        "low-medium": "#f0fdf4",
+        "low": "#f0fdf4"
+    };
+
+    const color = riskColors[batch.riskStatus] || "#6b7280";
+    const bgColor = bgColors[batch.riskStatus] || "#f3f4f6";
+
+    // Use Bangla summary if available, fallback to English
+    const summary = batch.lastRiskSummaryBn || batch.lastRiskSummaryEn || "No detailed risk summary available";
+
+    let html = `
+        <div style="padding: 12px; background: ${bgColor}; border-radius: 8px; border-left: 4px solid ${color}; margin: 10px 0;">
+            <div style="font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap;">
+                ${summary.substring(0, 200)}${summary.length > 200 ? '...' : ''}
+            </div>
+    `;
+
+    // Show risk factors if available
+    if (batch.riskFactors && batch.riskFactors.length > 0) {
+        const topFactors = batch.riskFactors.slice(0, 3); // Show top 3 factors
+        html += `
+            <details style="margin-top: 10px;">
+                <summary style="cursor: pointer; font-weight: 600; font-size: 0.85rem; color: #374151;">
+                    View ${batch.riskFactors.length} Risk Factor${batch.riskFactors.length > 1 ? 's' : ''}
+                </summary>
+                <div style="margin-top: 8px;">
+                    ${topFactors.map(rf => `
+                        <div style="padding: 6px 8px; background: white; border-radius: 4px; margin: 4px 0; font-size: 0.85rem;">
+                            <span style="font-weight: 600; color: ${getSeverityColor(rf.severity)}; text-transform: uppercase; font-size: 0.7rem;">
+                                ${rf.severity}
+                            </span>
+                            <span style="float: right; color: #6b7280;">${rf.impact}h</span>
+                            <div style="color: #374151; margin-top: 2px;">${rf.description}</div>
+                        </div>
+                    `).join('')}
+                    ${batch.riskFactors.length > 3 ? `<div style="font-size: 0.8rem; color: #6b7280; text-align: center; margin-top: 4px;">+${batch.riskFactors.length - 3} more factors</div>` : ''}
+                </div>
+            </details>
+        `;
+    }
+
+    // Show last update time if available
+    if (batch.lastWeatherUpdate) {
+        const updateTime = new Date(batch.lastWeatherUpdate).toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        html += `
+            <div style="font-size: 0.75rem; color: #6b7280; margin-top: 8px; text-align: right;">
+                Last updated: ${updateTime}
+            </div>
+        `;
+    }
+
+    html += `</div>`;
+
+    return html;
+}
+
+function getSeverityColor(severity) {
+    const colors = {
+        "critical": "#dc2626",
+        "high": "#ea580c",
+        "medium": "#f59e0b",
+        "low": "#84cc16"
+    };
+    return colors[severity] || "#6b7280";
+}

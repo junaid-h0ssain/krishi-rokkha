@@ -343,6 +343,16 @@ let currentUser = null;
 let currentLang = "en";
 let batchesCache = []; // local in-memory
 
+// Provide a minimal global helper for cross-module access (used by modules/weather.js)
+if (!window.HG) {
+    window.HG = {
+        getCurrentUser: () => currentUser
+    };
+} else {
+    // keep other potential properties intact, but ensure getCurrentUser exists
+    window.HG.getCurrentUser = () => currentUser;
+}
+
 // Language handling (Req 6)
 function loadLanguagePreference(user) {
     const fromLocal = localStorage.getItem("hg_lang");
@@ -972,6 +982,41 @@ function renderBatches() {
             `;
         }
 
+        // Risk badge + summary (if prediction engine populated fields)
+        const hasRisk = typeof batch.etclHours === 'number' && batch.riskStatus;
+        const riskColorMap = { high: '#dc2626', 'medium-high': '#ea580c', medium: '#f59e0b', 'low-medium': '#84cc16', low: '#16a34a' };
+        const riskColor = riskColorMap[batch.riskStatus] || '#6b7280';
+        const levelText = batch.riskLevelText || (batch.riskStatus ? batch.riskStatus.toUpperCase() : '');
+        const etclText = typeof batch.etclHours === 'number' ? `${batch.etclHours}h (${Math.floor(batch.etclHours/24)}d ${batch.etclHours%24}h)` : '';
+        const riskSummaryText = batch.lastRiskSummaryBn || batch.lastRiskSummaryEn || '';
+
+        const riskBlock = hasRisk ? `
+          <div class="risk-block" style="margin-top: 10px;">
+            <div class="risk-header" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+              <span class="risk-badge" style="background:${riskColor}; color:#fff; padding:6px 10px; border-radius:12px; font-weight:600; font-size:0.85rem;">${levelText}</span>
+              <span class="risk-etcl" style="color:#374151; font-size:0.85rem;">ETCL: ${etclText}</span>
+            </div>
+            ${riskSummaryText ? `<div class="risk-summary" style="margin-top:8px; background:#f9fafb; border:1px solid #e5e7eb; padding:10px; border-radius:8px; font-size:0.9rem; line-height:1.5; white-space:pre-wrap;">${riskSummaryText.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : ''}
+            ${Array.isArray(batch.riskFactors) && batch.riskFactors.length ? `
+              <details style="margin-top:8px;">
+                <summary style="cursor:pointer; font-weight:600; font-size:0.85rem; color:#374151;">View ${batch.riskFactors.length} Risk Factor${batch.riskFactors.length>1?'s':''}</summary>
+                <div style="margin-top:6px; display:grid; gap:6px;">
+                  ${batch.riskFactors.slice(0,3).map(rf => `
+                    <div style="background:#fff; border:1px solid #e5e7eb; border-left:3px solid ${rf.severity==='critical'?'#dc2626':rf.severity==='high'?'#ea580c':rf.severity==='medium'?'#f59e0b':'#84cc16'}; border-radius:6px; padding:8px;">
+                      <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-weight:700; text-transform:uppercase; font-size:0.7rem; color:#374151;">${rf.severity}</span>
+                        <span style="color:#6b7280; font-size:0.8rem;">Impact: ${rf.impact}h</span>
+                      </div>
+                      <div style="margin-top:4px; color:#374151; font-size:0.9rem;">${rf.description}</div>
+                    </div>
+                  `).join('')}
+                  ${batch.riskFactors.length>3 ? `<div style="text-align:center; color:#6b7280; font-size:0.8rem;">+${batch.riskFactors.length-3} more factors</div>`: ''}
+                </div>
+              </details>
+            `:''}
+          </div>
+        ` : '';
+
         div.innerHTML = `
       <div class="batch-header">
         <p><strong>${batch.crop || "Unknown Crop"}</strong> <span class="batch-weight">(${batch.weight || 0} kg)</span></p>
@@ -982,7 +1027,8 @@ function renderBatches() {
         <p><strong>${l.storageLabel || "Storage"}:</strong> ${batch.storageType || "N/A"}</p>
         <p><strong>${l.locationLabel || "Location"}:</strong> ${batch.location || "N/A"}</p>
       </div>
-      ${batch.imageUrl ? `<img src="${batch.imageUrl}" class="batch-img" />` : ""}
+      ${riskBlock}
+      ${batch.imageUrl ? `<img src="${batch.imageUrl}" class="batch-img" alt="${batch.crop || 'Batch image'}" />` : ""}
       ${actionButtons}
     `;
         activeBatchesDiv.appendChild(div);
@@ -1307,7 +1353,31 @@ async function initUserData() {
     renderBatches();
     await loadProfile();
     await processQueue();
+
+    // Initialize weather first so window.HG_weather is available
+    try {
+        initWeather();
+    } catch (e) {
+        console.warn("Weather init failed:", e);
+    }
+
+    // Auto-update batch risk from weather (ETCL) when available
+    try {
+        if (window.HG_weather && typeof window.HG_weather.updateBatchRiskFromWeather === 'function') {
+            const updated = await window.HG_weather.updateBatchRiskFromWeather(batchesCache);
+            if (Array.isArray(updated)) {
+                batchesCache = updated;
+                saveLocalBatches();
+                renderBatches();
+            }
+        } else {
+            console.info("HG_weather not ready; skipping automatic ETCL update.");
+        }
+    } catch (e) {
+        console.error("ETCL update from weather failed:", e);
+    }
+
+    // Keep other modules active
     runRiskDetection();
-    initWeather();
     initAiScanner();
 }

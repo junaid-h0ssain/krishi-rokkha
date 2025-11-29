@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4: Prediction & Risk Forecasting</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Page specific overrides */
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cbd5e0;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #2c7a7b, #f6ad55);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .forecast-day {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        .risk-high { color: #fc8181; }
+        .risk-medium { color: #f6ad55; }
+        .risk-low { color: #68d391; }
+        
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid #2c7a7b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header style="margin-bottom: 30px; text-align: center;">
+            <h1 style="color: #f6ad55;">Aflatoxin Risk Prediction Engine</h1>
+            <p style="color: #cbd5e0;">Estimate Time to Critical Loss (ETCL) based on sensor data and weather forecasts.</p>
+        </header>
+
+        <div class="grid">
+            <!-- INPUTS -->
+            <div class="card">
+                <h2>1. Batch & Sensor Data</h2>
+                <div class="input-group">
+                    <label for="region">Division / District</label>
+                    <select id="region" onchange="updateForecastDisplay()">
+                        <option value="Dhaka">Dhaka (High Humidity)</option>
+                        <option value="Chittagong">Chittagong (Rainy)</option>
+                        <option value="Rajshahi">Rajshahi (Dry/Hot)</option>
+                        <option value="Sylhet">Sylhet (Heavy Rain)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="moisture">Grain Moisture (%)</label>
+                    <input type="number" id="moisture" value="16.5" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="temperature">Storage Temperature (°C)</label>
+                    <input type="number" id="temperature" value="32.0" step="0.1">
+                </div>
+                <button class="btn" onclick="calculateRisk()">Calculate Risk</button>
+            </div>
+
+            <!-- WEATHER FORECAST -->
+            <div class="card">
+                <h2>2. 7-Day Weather Forecast</h2>
+                <p style="font-size: 14px; color: #a0aec0; margin-bottom: 10px;">Mock data based on selected region</p>
+                <div id="forecast-container">
+                    <!-- Forecast items will be injected here -->
+                </div>
+            </div>
+
+            <!-- RESULTS -->
+            <div class="card tall">
+                <h2>3. Risk Summary</h2>
+                <div id="result-output" style="width: 100%;">
+                    <p style="color: #a0aec0; text-align: center; margin-top: 40px;">
+                        Click "Calculate Risk" to generate the analysis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- MOCK WEATHER DATA ---
+        const mockWeatherData = {
+            "Dhaka": [
+                { day: "Day 1", temp: 33, humidity: 82, rain: 60 },
+                { day: "Day 2", temp: 34, humidity: 80, rain: 40 },
+                { day: "Day 3", temp: 32, humidity: 78, rain: 50 },
+                { day: "Day 4", temp: 31, humidity: 75, rain: 30 },
+                { day: "Day 5", temp: 35, humidity: 81, rain: 65 },
+                { day: "Day 6", temp: 30, humidity: 70, rain: 20 },
+                { day: "Day 7", temp: 33, humidity: 85, rain: 60 },
+            ],
+            "Chittagong": [
+                { day: "Day 1", temp: 29, humidity: 92, rain: 90 },
+                { day: "Day 2", temp: 28, humidity: 95, rain: 85 },
+                { day: "Day 3", temp: 29, humidity: 90, rain: 80 },
+                { day: "Day 4", temp: 30, humidity: 88, rain: 70 },
+                { day: "Day 5", temp: 31, humidity: 85, rain: 60 },
+                { day: "Day 6", temp: 30, humidity: 82, rain: 50 },
+                { day: "Day 7", temp: 29, humidity: 80, rain: 40 },
+            ],
+            "Rajshahi": [
+                { day: "Day 1", temp: 38, humidity: 45, rain: 0 },
+                { day: "Day 2", temp: 39, humidity: 40, rain: 0 },
+                { day: "Day 3", temp: 37, humidity: 42, rain: 10 },
+                { day: "Day 4", temp: 36, humidity: 48, rain: 5 },
+                { day: "Day 5", temp: 38, humidity: 44, rain: 0 },
+                { day: "Day 6", temp: 39, humidity: 40, rain: 0 },
+                { day: "Day 7", temp: 37, humidity: 45, rain: 10 },
+            ],
+            "Sylhet": [
+                { day: "Day 1", temp: 28, humidity: 88, rain: 95 },
+                { day: "Day 2", temp: 27, humidity: 90, rain: 100 },
+                { day: "Day 3", temp: 28, humidity: 85, rain: 80 },
+                { day: "Day 4", temp: 29, humidity: 82, rain: 70 },
+                { day: "Day 5", temp: 30, humidity: 80, rain: 60 },
+                { day: "Day 6", temp: 31, humidity: 78, rain: 50 },
+                { day: "Day 7", temp: 30, humidity: 75, rain: 40 },
+            ]
+        };
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            updateForecastDisplay();
+        };
+
+        function updateForecastDisplay() {
+            const region = document.getElementById('region').value;
+            const forecast = mockWeatherData[region];
+            const container = document.getElementById('forecast-container');
+            
+            container.innerHTML = '';
+            forecast.forEach(day => {
+                const div = document.createElement('div');
+                div.className = 'forecast-day';
+                div.innerHTML = `
+                    <strong>${day.day}</strong>
+                    <span>🌡️ ${day.temp}°C</span>
+                    <span>💧 ${day.humidity}%</span>
+                    <span>🌧️ ${day.rain}%</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // --- PREDICTION ENGINE LOGIC ---
+        function calculateRisk() {
+            // 1. Get Inputs
+            const moisture = parseFloat(document.getElementById('moisture').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const region = document.getElementById('region').value;
+            const forecast = mockWeatherData[region];
+
+            // 2. Base ETCL Calculation (Simple Model)
+            // Start with a safe baseline (e.g., 5 days / 120 hours for dry grain)
+            let etcl = 120; 
+
+            // Moisture Impact: Critical if > 14%
+            if (moisture > 14) {
+                // Drastic reduction for every percentage point above 14
+                const excessMoisture = moisture - 14;
+                etcl -= (excessMoisture * 20); // e.g., 16% -> 120 - 40 = 80 hours
+            }
+
+            // Temperature Impact: Mold grows faster in warm conditions (25-35°C)
+            if (temperature > 25 && temperature < 40) {
+                etcl -= 10; // General penalty for warm weather
+                if (temperature > 30) etcl -= 10; // Extra penalty for hot weather
+            }
+
+            // 3. Weather Integration (Refining ETCL)
+            // Look at the next 3 days as they are most critical
+            let rainRisk = false;
+            let humidityRisk = false;
+            let dryingCondition = "Neutral";
+
+            for (let i = 0; i < 3; i++) {
+                const day = forecast[i];
+                if (day.rain > 50) {
+                    etcl -= 12; // Rain delays drying significantly
+                    rainRisk = true;
+                }
+                if (day.humidity > 80) {
+                    etcl -= 8; // High humidity slows drying
+                    humidityRisk = true;
+                }
+            }
+
+            // Cap ETCL at minimum 0
+            if (etcl < 0) etcl = 0;
+
+            // 4. Determine Risk Level & Advice
+            let riskLevel = "Low Risk";
+            let riskClass = "risk-low";
+            let advice = "Conditions are stable. Routine monitoring is sufficient.";
+
+            if (etcl <= 48) {
+                riskLevel = "High Risk";
+                riskClass = "risk-high";
+                advice = "Immediate action required! Dry mechanically or move to a controlled environment.";
+            } else if (etcl <= 96) {
+                riskLevel = "Medium Risk";
+                riskClass = "risk-medium";
+                advice = "Monitor closely. Prepare for drying if weather worsens.";
+            }
+
+            // Weather Context for Summary
+            let weatherNote = "Weather forecast is favorable.";
+            if (rainRisk && humidityRisk) {
+                weatherNote = "Weather forecast suggests <strong>high humidity and rain</strong>, making natural drying impossible.";
+                if (riskLevel === "High Risk") advice += " <strong>Indoor aeration is mandatory.</strong>";
+            } else if (rainRisk) {
+                weatherNote = "Rain is expected, which will hinder sun drying.";
+            } else if (humidityRisk) {
+                weatherNote = "High humidity is expected, slowing down moisture loss.";
+            } else if (region === "Rajshahi") {
+                weatherNote = "Dry and hot weather expected, ideal for sun drying.";
+                if (etcl > 72) advice = "Conditions are excellent for natural drying.";
+            }
+
+            // 5. Generate Human-Readable Summary
+            const summaryHTML = `
+                <h3 class="${riskClass}">${riskLevel} of Aflatoxin Mold</h3>
+                <p style="font-size: 18px; font-weight: bold;">ETCL: ${Math.round(etcl)} hours</p>
+                <div class="result-box" style="border-color: ${riskLevel === 'High Risk' ? '#fc8181' : (riskLevel === 'Medium Risk' ? '#f6ad55' : '#68d391')}">
+                    <p><strong>Weather Analysis:</strong> ${weatherNote}</p>
+                    <p><strong>Recommendation:</strong> ${advice}</p>
+                </div>
+                <p style="margin-top: 15px; font-size: 13px; color: #a0aec0;">
+                    *ETCL (Estimated Time to Critical Loss) indicates how long until grain quality significantly degrades.
+                </p>
+            `;
+
+            document.getElementById('result-output').innerHTML = summaryHTML;
+        }
+    </script>
+</body>
+</html>
