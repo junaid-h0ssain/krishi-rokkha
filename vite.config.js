@@ -11,6 +11,7 @@ export default defineConfig({
         about: resolve(__dirname, 'public/about.html'),
         farmer_stories: resolve(__dirname, 'public/farmer_stories.html'),
         our_research: resolve(__dirname, 'public/our_research.html'),
+        pest_scan: resolve(__dirname, 'public/pest-scan.html'),
       },
     },
   },

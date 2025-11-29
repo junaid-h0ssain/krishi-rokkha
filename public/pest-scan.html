@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐛 পোকা শনাক্তকরণ | কৃষিরক্ষা</title>
+    <link rel="stylesheet" href="/css/pest-scan.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="/" class="nav-logo">কৃষিরক্ষা</a>
+            <button class="nav-back" onclick="history.back()">← ফিরে যান</button>
+        </nav>
+
+        <!-- Main Container -->
+        <div class="pest-scan-container">
+            <!-- Header -->
+            <div class="pest-scan-header">
+                <h1>🐛 পোকা ও রোগ শনাক্তকরণ</h1>
+                <p>আপনার ফসলের ছবি আপলোড করুন এবং AI-এর সাহায্যে পোকা বা রোগ শনাক্ত করুন</p>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📷</div>
+                    <p class="upload-text">ছবি আপলোড করতে এখানে ক্লিক করুন</p>
+                    <p class="upload-hint">অথবা ছবি টেনে এখানে ছেড়ে দিন (JPEG/PNG)</p>
+                </div>
+                <input type="file" id="file-input" accept="image/jpeg,image/png">
+
+                <!-- Image Preview -->
+                <div class="preview-section" id="preview-section">
+                    <div class="preview-container">
+                        <img src="" alt="Preview" id="image-preview">
+                        <button class="remove-image-btn" id="remove-image-btn" title="ছবি সরান">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scan Button -->
+            <button class="scan-button" id="scan-button">
+                <span class="btn-text">🔍 স্ক্যান করুন</span>
+                <span class="loading-spinner"></span>
+            </button>
+
+            <!-- Status Message -->
+            <div class="status-message" id="status-message"></div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section"></div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>কৃষিরক্ষা - বাংলাদেশী কৃষকদের জন্য AI-ভিত্তিক সমাধান</p>
+            <p>Powered by Google Gemini AI</p>
+        </footer>
+    </div>
+
+    <script src="/js/pest-scan.js"></script>
+</body>
+</html>
