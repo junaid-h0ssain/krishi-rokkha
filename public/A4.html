@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A4: Prediction & Risk Forecasting</title>
+    <link rel="stylesheet" href="css/header_footer.css">
     <link rel="stylesheet" href="css/styles.css">
+    <script type="module" src="./js/shared_nav.js"></script>
     <style>
         /* Page specific overrides */
         .input-group {
@@ -63,55 +65,100 @@
 </head>
 <body>
 
-    <div class="container">
-        <header style="margin-bottom: 30px; text-align: center;">
-            <h1 style="color: #f6ad55;">Aflatoxin Risk Prediction Engine</h1>
-            <p style="color: #cbd5e0;">Estimate Time to Critical Loss (ETCL) based on sensor data and weather forecasts.</p>
+    <div class="page">
+        <!-- Header -->
+        <header class="nav">
+            <a href="/welcome.html" class="nav-logo"
+                style="text-decoration: none; color: inherit; cursor: pointer;">KrishiRokkha</a>
+            <nav class="nav-links">
+                <a href="/about.html" data-i18n="nav-features">About Us</a>
+                <a href="/farmer_stories.html" data-i18n="nav-impact">Testimonies</a>
+                <a href="/our_research.html" data-i18n="nav-about">Research</a>
+            </nav>
+            <div class="nav-buttons">
+                <button id="lang-toggle" class="nav-cta">
+                    <span id="lang-text">বাংলা</span>
+                </button>
+                <button id="enter-app-btn" class="nav-cta" data-i18n="nav-enter">Enter App</button>
+            </div>
         </header>
 
-        <div class="grid">
-            <!-- INPUTS -->
-            <div class="card">
-                <h2>1. Batch & Sensor Data</h2>
-                <div class="input-group">
-                    <label for="region">Division / District</label>
-                    <select id="region" onchange="updateForecastDisplay()">
-                        <option value="Dhaka">Dhaka (High Humidity)</option>
-                        <option value="Chittagong">Chittagong (Rainy)</option>
-                        <option value="Rajshahi">Rajshahi (Dry/Hot)</option>
-                        <option value="Sylhet">Sylhet (Heavy Rain)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="moisture">Grain Moisture (%)</label>
-                    <input type="number" id="moisture" value="16.5" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label for="temperature">Storage Temperature (°C)</label>
-                    <input type="number" id="temperature" value="32.0" step="0.1">
-                </div>
-                <button class="btn" onclick="calculateRisk()">Calculate Risk</button>
+        <div class="container">
+            <div class="hero-section" style="margin-bottom: 30px; text-align: center;">
+                <h1 style="color: #f6ad55;">Aflatoxin Risk Prediction Engine</h1>
+                <p style="color: #cbd5e0;">Estimate Time to Critical Loss (ETCL) based on sensor data and weather forecasts.</p>
             </div>
 
-            <!-- WEATHER FORECAST -->
-            <div class="card">
-                <h2>2. 7-Day Weather Forecast</h2>
-                <p style="font-size: 14px; color: #a0aec0; margin-bottom: 10px;">Mock data based on selected region</p>
-                <div id="forecast-container">
-                    <!-- Forecast items will be injected here -->
+            <div class="grid">
+                <!-- INPUTS -->
+                <div class="card">
+                    <h2>1. Batch & Sensor Data</h2>
+                    <div class="input-group">
+                        <label for="region">Division / District</label>
+                        <select id="region" onchange="updateForecastDisplay()">
+                            <option value="Dhaka">Dhaka (High Humidity)</option>
+                            <option value="Chittagong">Chittagong (Rainy)</option>
+                            <option value="Rajshahi">Rajshahi (Dry/Hot)</option>
+                            <option value="Sylhet">Sylhet (Heavy Rain)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="moisture">Grain Moisture (%)</label>
+                        <input type="number" id="moisture" value="16.5" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label for="temperature">Storage Temperature (°C)</label>
+                        <input type="number" id="temperature" value="32.0" step="0.1">
+                    </div>
+                    <button class="btn" onclick="calculateRisk()">Calculate Risk</button>
                 </div>
-            </div>
 
-            <!-- RESULTS -->
-            <div class="card tall">
-                <h2>3. Risk Summary</h2>
-                <div id="result-output" style="width: 100%;">
-                    <p style="color: #a0aec0; text-align: center; margin-top: 40px;">
-                        Click "Calculate Risk" to generate the analysis.
-                    </p>
+                <!-- WEATHER FORECAST -->
+                <div class="card">
+                    <h2>2. 7-Day Weather Forecast</h2>
+                    <p style="font-size: 14px; color: #a0aec0; margin-bottom: 10px;">Mock data based on selected region</p>
+                    <div id="forecast-container">
+                        <!-- Forecast items will be injected here -->
+                    </div>
+                </div>
+
+                <!-- RESULTS -->
+                <div class="card tall">
+                    <h2>3. Risk Summary</h2>
+                    <div id="result-output" style="width: 100%;">
+                        <p style="color: #a0aec0; text-align: center; margin-top: 40px;">
+                            Click "Calculate Risk" to generate the analysis.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <footer class="footer" id="about">
+            <div class="footer-brand">
+                <div class="nav-logo" style="margin-bottom:10px;">KrishiRokkha</div>
+                <p data-i18n="footer-desc">Empowering Bangladeshi farmers to reduce post-harvest losses and build a more
+                    resilient, sustainable food system.</p>
+            </div>
+            <div class="footer-columns">
+                <div>
+                    <p class="footer-heading" data-i18n="footer-about-title">About KrishiRokkha</p>
+                    <div class="footer-list">
+                        <a href="#" data-i18n="footer-mission">Our Mission</a>
+                        <a href="#" data-i18n="footer-sdg">SDG Impact</a>
+                        <a href="#" data-i18n="footer-team">Team</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="footer-heading" data-i18n="footer-resources-title">Resources</p>
+                    <div class="footer-list">
+                        <a href="#" data-i18n="footer-guide">User Guide</a>
+                        <a href="#" data-i18n="footer-research">Research & Data</a>
+                        <a href="#" data-i18n="footer-stories">Farmer Stories</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script>

@@ -579,6 +579,18 @@ async function loadProfile() {
         profileCreated.textContent = data.createdAt || "";
         document.getElementById("edit-name").value = data.name || "";
         document.getElementById("edit-bio").value = data.bio || "";
+        // Load profile picture
+        if (data.profilePicture) {
+            profilePicture.src = data.profilePicture;
+            profilePicture.classList.remove("hidden");
+            noPictureText.classList.add("hidden");
+            removePictureBtn.style.display = "block";
+        } else {
+            profilePicture.src = "";
+            profilePicture.classList.add("hidden");
+            noPictureText.classList.remove("hidden");
+            removePictureBtn.style.display = "none";
+        }
     }
 }
 
@@ -1344,6 +1356,78 @@ function markBatchLost(idx) {
     } else {
         enqueueOperation({ type: "updateBatchStatus", data: { id: batch.id || null, status: "lost", riskStatus: "lost" } });
     }
+}
+
+// Profile picture upload functionality
+const uploadPictureBtn = document.getElementById("upload-picture-btn");
+const profilePictureInput = document.getElementById("profile-picture-input");
+const profilePicture = document.getElementById("profile-picture");
+const noPictureText = document.getElementById("no-picture-text");
+const uploadStatus = document.getElementById("upload-status");
+const removePictureBtn = document.getElementById("remove-picture-btn");
+
+if (uploadPictureBtn && profilePictureInput) {
+    uploadPictureBtn.addEventListener("click", () => {
+        profilePictureInput.click();
+    });
+
+    profilePictureInput.addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        uploadStatus.textContent = "Uploading...";
+        uploadStatus.style.color = "#666";
+
+        try {
+            const imageUrl = await uploadToCloudinary(file);
+
+            // Update the profile picture in the UI
+            profilePicture.src = imageUrl;
+            profilePicture.classList.remove("hidden");
+            noPictureText.classList.add("hidden");
+            removePictureBtn.style.display = "block";
+
+            // Save the image URL to Firestore
+            if (currentUser) {
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    profilePicture: imageUrl
+                });
+            }
+
+            uploadStatus.textContent = "Upload successful!";
+            uploadStatus.style.color = "green";
+        } catch (error) {
+            console.error("Error uploading profile picture:", error);
+            uploadStatus.textContent = "Upload failed. Please try again.";
+            uploadStatus.style.color = "red";
+        }
+    });
+}
+
+if (removePictureBtn) {
+    removePictureBtn.addEventListener("click", async () => {
+        if (!currentUser) return;
+
+        try {
+            // Remove the profile picture from Firestore
+            await updateDoc(doc(db, "users", currentUser.uid), {
+                profilePicture: null
+            });
+
+            // Update the UI
+            profilePicture.src = "";
+            profilePicture.classList.add("hidden");
+            noPictureText.classList.remove("hidden");
+            removePictureBtn.style.display = "none";
+
+            uploadStatus.textContent = "Profile picture removed.";
+            uploadStatus.style.color = "green";
+        } catch (error) {
+            console.error("Error removing profile picture:", error);
+            uploadStatus.textContent = "Failed to remove profile picture.";
+            uploadStatus.style.color = "red";
+        }
+    });
 }
 
 // Initialization
