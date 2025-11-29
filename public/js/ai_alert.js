@@ -1,5 +1,6 @@
-const apiUrl = import.meta.env.VITE_SMART_AI_API_URL;
-const apiKey = import.meta.env.VITE_SMART_AI_API_KEY;
+// Note: Files in /public are not processed by Vite, so we can't use import.meta.env
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+const apiKey = "f905bf0fa32ad70f3a3937ae1abcabf4";
 
 const areaCoords = {
   "Chittagong": { lat: 22.3569, lon: 91.7832 },
