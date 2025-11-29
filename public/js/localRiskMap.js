@@ -8,9 +8,9 @@ class LocalRiskMap {
     this.map = null;
     this.markers = [];
     this.neighborData = [];
-    this.farmerLocation = { latitude: 23.8103, longitude: 90.4125 }; // Default Dhaka center
+    this.farmerLocation = { latitude: 22.3569, longitude: 91.7832 }; // Default Chittagong center
     this.currentPopup = null;
-    
+
     this.mapConfig = {
       defaultZoom: 10,
       minZoom: 8,
@@ -32,22 +32,25 @@ class LocalRiskMap {
     try {
       // Initialize map
       this.initializeMap(this.farmerLocation, this.mapConfig.defaultZoom);
-      
+
       // Load mock data
       await this.loadMockData();
-      
+
       // Add farmer marker
       this.addFarmerMarker();
-      
+
       // Add neighbor markers
       this.addNeighborMarkers();
-      
+
+      // Add legend
+      this.addLegend();
+
       // Set up event listeners
       this.setupEventListeners();
-      
+
       // Set up language switcher
       this.setupLanguageSwitcher();
-      
+
       // Update UI text
       this.updateUIText();
     } catch (error) {
@@ -126,9 +129,9 @@ class LocalRiskMap {
 
     return data.filter(item => {
       // Check required fields
-      if (!item.coordinates || 
-          typeof item.coordinates.latitude !== 'number' ||
-          typeof item.coordinates.longitude !== 'number') {
+      if (!item.coordinates ||
+        typeof item.coordinates.latitude !== 'number' ||
+        typeof item.coordinates.longitude !== 'number') {
         console.warn('Invalid coordinates in data item:', item);
         return false;
       }
@@ -154,7 +157,7 @@ class LocalRiskMap {
   addFarmerMarker() {
     // Create blue marker icon for farmer's location
     const farmerIcon = this.createIcon(this.mapConfig.markerColors.Own);
-    
+
     // Add marker at farmer's location
     const marker = L.marker(
       [this.farmerLocation.latitude, this.farmerLocation.longitude],
@@ -163,7 +166,7 @@ class LocalRiskMap {
 
     // Bind popup to farmer marker
     marker.bindPopup('Your Location');
-    
+
     // Store marker reference
     this.markers.push(marker);
   }
@@ -175,8 +178,8 @@ class LocalRiskMap {
     this.neighborData.forEach(neighbor => {
       try {
         const color = this.mapConfig.markerColors[neighbor.riskLevel];
-        const icon = this.createIcon(color);
-        
+        const icon = this.createIcon(color, neighbor.riskLevel);
+
         const marker = L.marker(
           [neighbor.coordinates.latitude, neighbor.coordinates.longitude],
           { icon: icon }
@@ -184,6 +187,15 @@ class LocalRiskMap {
 
         // Store neighbor data on marker for popup
         marker.neighborData = neighbor;
+
+        // Add tooltip for quick info
+        const tooltipContent = this.generateTooltipContent(neighbor);
+        marker.bindTooltip(tooltipContent, {
+          permanent: false,
+          direction: 'top',
+          offset: [0, -32],
+          className: 'custom-tooltip'
+        });
 
         // Add click event listener
         marker.on('click', () => this.handleMarkerClick(marker));
@@ -200,7 +212,12 @@ class LocalRiskMap {
    * @param {string} color - Hex color code
    * @returns {L.Icon} Leaflet icon
    */
-  createIcon(color) {
+  createIcon(color, riskLevel = null) {
+    let className = '';
+    if (riskLevel === 'High') {
+      className = 'marker-pulse-high';
+    }
+
     return L.icon({
       iconUrl: `data:image/svg+xml;base64,${btoa(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
@@ -209,7 +226,8 @@ class LocalRiskMap {
       `)}`,
       iconSize: [32, 32],
       iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
+      popupAnchor: [0, -32],
+      className: className
     });
   }
 
@@ -232,7 +250,7 @@ class LocalRiskMap {
     const popupContent = this.generatePopupContent(marker.neighborData);
     marker.setPopupContent(popupContent);
     marker.openPopup();
-    
+
     // Track current open pop-up
     this.currentPopup = marker;
   }
@@ -247,16 +265,16 @@ class LocalRiskMap {
   generatePopupContent(neighborData) {
     try {
       const lang = localization.getLanguage();
-      
+
       // Get localized labels
       const cropTypeLabel = localization.getText('cropType', lang);
       const riskLevelLabel = localization.getText('riskLevel', lang);
       const lastUpdateLabel = localization.getText('lastUpdate', lang);
-      
+
       // Get localized values
       const cropTypeName = localization.getCropTypeLabel(neighborData.cropType, lang);
       const riskLevelName = localization.getRiskLevelLabel(neighborData.riskLevel, lang);
-      
+
       // Format timestamp in appropriate locale
       const updateTime = new Date(neighborData.lastUpdateTime).toLocaleString(
         lang === 'bn' ? 'bn-BD' : 'en-US'
@@ -288,17 +306,39 @@ class LocalRiskMap {
   }
 
   /**
+   * Generate localized tooltip content
+   * @param {Object} neighborData
+   * @returns {string} Tooltip content
+   */
+  generateTooltipContent(neighborData) {
+    const lang = localization.getLanguage();
+    const cropTypeName = localization.getCropTypeLabel(neighborData.cropType, lang);
+    const riskLevelName = localization.getRiskLevelLabel(neighborData.riskLevel, lang);
+
+    // Format timestamp
+    const updateTime = new Date(neighborData.lastUpdateTime).toLocaleString(
+      lang === 'bn' ? 'bn-BD' : 'en-US',
+      { hour: 'numeric', minute: 'numeric', hour12: true }
+    );
+
+    if (lang === 'bn') {
+      return `${cropTypeName} - ${riskLevelName} ঝুঁকি (${updateTime})`;
+    }
+    return `${cropTypeName} - ${riskLevelName} Risk (${updateTime})`;
+  }
+
+  /**
    * Set up viewport resize handler
    * Listens for window resize events and calls map.invalidateSize() to update map dimensions
    * Uses debouncing to prevent excessive resize calculations
    */
   setupResizeHandler() {
     let resizeTimeout;
-    
+
     window.addEventListener('resize', () => {
       // Clear previous timeout
       clearTimeout(resizeTimeout);
-      
+
       // Debounce resize events to avoid excessive calculations
       resizeTimeout = setTimeout(() => {
         if (this.map) {
@@ -319,8 +359,8 @@ class LocalRiskMap {
     // Detect if device supports touch
     const isTouchDevice = () => {
       return (('ontouchstart' in window) ||
-              (navigator.maxTouchPoints > 0) ||
-              (navigator.msMaxTouchPoints > 0));
+        (navigator.maxTouchPoints > 0) ||
+        (navigator.msMaxTouchPoints > 0));
     };
 
     // Add touch event listeners for better mobile support
@@ -356,23 +396,22 @@ class LocalRiskMap {
   /**
    * Set up language switcher buttons
    */
+  /**
+   * Set up language switcher buttons
+   */
   setupLanguageSwitcher() {
-    const langEnBtn = document.getElementById('langEnglish');
-    const langBnBtn = document.getElementById('langBangla');
+    const langToggle = document.getElementById('lang-toggle');
 
-    if (langEnBtn) {
-      langEnBtn.addEventListener('click', () => {
-        localization.setLanguage('en');
-        this.updateLanguageUI('en');
-        this.updateAllPopups();
-      });
-    }
+    if (langToggle) {
+      langToggle.addEventListener('click', () => {
+        // Get current language from localization module
+        const currentLang = localization.getLanguage();
+        // Toggle language
+        const newLang = currentLang === 'en' ? 'bn' : 'en';
 
-    if (langBnBtn) {
-      langBnBtn.addEventListener('click', () => {
-        localization.setLanguage('bn');
-        this.updateLanguageUI('bn');
+        localization.setLanguage(newLang);
         this.updateAllPopups();
+        this.updateUIText();
       });
     }
   }
@@ -382,14 +421,10 @@ class LocalRiskMap {
    * @param {string} language - Language code
    */
   updateLanguageUI(language) {
-    const langEnBtn = document.getElementById('langEnglish');
-    const langBnBtn = document.getElementById('langBangla');
-
-    if (langEnBtn) {
-      langEnBtn.classList.toggle('active', language === 'en');
-    }
-    if (langBnBtn) {
-      langBnBtn.classList.toggle('active', language === 'bn');
+    // Sync the shared nav button text
+    const langText = document.getElementById('lang-text');
+    if (langText) {
+      langText.textContent = language === 'en' ? 'বাংলা' : 'English';
     }
   }
 
@@ -398,9 +433,16 @@ class LocalRiskMap {
    */
   updateAllPopups() {
     this.markers.forEach(marker => {
-      if (marker.neighborData && marker.isPopupOpen && marker.isPopupOpen()) {
-        const popupContent = this.generatePopupContent(marker.neighborData);
-        marker.setPopupContent(popupContent);
+      if (marker.neighborData) {
+        // Update popup if open
+        if (marker.isPopupOpen && marker.isPopupOpen()) {
+          const popupContent = this.generatePopupContent(marker.neighborData);
+          marker.setPopupContent(popupContent);
+        }
+
+        // Update tooltip
+        const tooltipContent = this.generateTooltipContent(marker.neighborData);
+        marker.setTooltipContent(tooltipContent);
       }
     });
   }
@@ -411,11 +453,72 @@ class LocalRiskMap {
   updateUIText() {
     const lang = localization.getLanguage();
     const pageTitle = document.getElementById('pageTitle');
-    
+
     if (pageTitle) {
       pageTitle.textContent = localization.getText('pageTitle', lang);
     }
 
     this.updateLanguageUI(lang);
+    this.updateLegend();
+  }
+
+  /**
+   * Add legend to the map
+   */
+  addLegend() {
+    if (this.legendControl) {
+      this.map.removeControl(this.legendControl);
+    }
+
+    this.legendControl = L.control({ position: 'bottomleft' });
+
+    this.legendControl.onAdd = () => {
+      const div = L.DomUtil.create('div', 'info legend');
+      this.legendDiv = div; // Store reference to update content
+      this.updateLegendContent(div);
+      return div;
+    };
+
+    this.legendControl.addTo(this.map);
+  }
+
+  /**
+   * Update legend content based on current language
+   */
+  updateLegend() {
+    if (this.legendDiv) {
+      this.updateLegendContent(this.legendDiv);
+    }
+  }
+
+  /**
+   * Generate legend HTML content
+   * @param {HTMLElement} div - Legend container
+   */
+  updateLegendContent(div) {
+    const lang = localization.getLanguage();
+    const grades = ['Low', 'Medium', 'High', 'Own'];
+    const labels = [
+      localization.getText('riskLevels.Low', lang),
+      localization.getText('riskLevels.Medium', lang),
+      localization.getText('riskLevels.High', lang),
+      localization.getText('yourLocation', lang)
+    ];
+    const colors = [
+      this.mapConfig.markerColors.Low,
+      this.mapConfig.markerColors.Medium,
+      this.mapConfig.markerColors.High,
+      this.mapConfig.markerColors.Own
+    ];
+
+    let html = '';
+    for (let i = 0; i < grades.length; i++) {
+      html +=
+        '<div style="display: flex; align-items: center; margin-bottom: 5px;">' +
+        `<i style="background:${colors[i]}; width: 18px; height: 18px; border-radius: 50%; display: inline-block; margin-right: 8px;"></i> ` +
+        `<span>${labels[i]}</span>` +
+        '</div>';
+    }
+    div.innerHTML = html;
   }
 }

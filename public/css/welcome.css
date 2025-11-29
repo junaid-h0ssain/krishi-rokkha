@@ -673,17 +673,24 @@ a {
 
 /* Footer Team Link Highlight */
 .footer-heading a[data-i18n="footer-team"] {
-    color: #f5b35c;           /* accent color */
-    text-decoration: none;     /* remove underline */
-    font-weight: 500;          /* semi-bold */
-    font-size: 15px;           /* readable size */
-    line-height: 1.5;          /* spacing for paragraph feel */
+    color: #f5b35c;
+    /* accent color */
+    text-decoration: none;
+    /* remove underline */
+    font-weight: 500;
+    /* semi-bold */
+    font-size: 15px;
+    /* readable size */
+    line-height: 1.5;
+    /* spacing for paragraph feel */
     transition: color 0.3s;
 }
 
 .footer-heading a[data-i18n="footer-team"]:hover {
-    color: #f6d089;           /* lighter accent on hover */
-    text-decoration: underline; /* optional hover effect */
+    color: #f6d089;
+    /* lighter accent on hover */
+    text-decoration: underline;
+    /* optional hover effect */
 }
 
 

@@ -21,23 +21,25 @@ class Localization {
           rice: 'Rice',
           wheat: 'Wheat',
           vegetables: 'Vegetables'
-        }
+        },
+        yourLocation: 'Your Location'
       },
       bn: {
         pageTitle: 'স্থানীয় ঝুঁকি মানচিত্র',
-        cropType: 'ফসলের ধরন',
-        riskLevel: 'ঝুঁকির স্তর',
+        cropType: 'ফসল',
+        riskLevel: 'ঝুঁকি',
         lastUpdate: 'শেষ আপডেট',
         riskLevels: {
-          Low: 'কম ঝুঁকি',
-          Medium: 'মধ্যম ঝুঁকি',
-          High: 'উচ্চ ঝুঁকি'
+          Low: 'কম',
+          Medium: 'মধ্যম',
+          High: 'উচ্চ'
         },
         cropTypes: {
           rice: 'ধান',
           wheat: 'গম',
           vegetables: 'সবজি'
-        }
+        },
+        yourLocation: 'আপনার অবস্থান'
       }
     };
   }
@@ -135,8 +137,3 @@ class Localization {
 
 // Create global instance
 const localization = new Localization();
-
-// Attach localization to the global window object
-if (typeof window !== 'undefined') {
-    window.localization = localization;
-}

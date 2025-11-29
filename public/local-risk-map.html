@@ -1,26 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Risk Map</title>
-    
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-    
+
+    <!-- Shared Header/Footer CSS -->
+    <link rel="stylesheet" href="./css/header_footer.css">
+    <link rel="stylesheet" href="./css/styles.css">
+
     <!-- Local Risk Map CSS -->
     <link rel="stylesheet" href="css/local-risk-map.css">
+
+    <!-- Shared Navigation Logic -->
+    <script type="module" src="./js/shared_nav.js"></script>
 </head>
+
 <body>
     <div class="container">
-        <header class="header">
-            <h1 id="pageTitle">Local Risk Map</h1>
-            <div class="language-switcher">
-                <button id="langEnglish" class="lang-btn active" data-lang="en">English</button>
-                <button id="langBangla" class="lang-btn" data-lang="bn">বাংলা</button>
+        <header class="nav">
+            <a href="/welcome.html" class="nav-logo"
+                style="text-decoration: none; color: white; cursor: pointer;">KrishiRokkha</a>
+            <nav class="nav-links">
+                <a href="/about.html" data-i18n="nav-features" style="color: white;">About Us</a>
+                <a href="/farmer_stories.html" data-i18n="nav-impact" style="color: white;">Testimonies</a>
+                <a href="/our_research.html" data-i18n="nav-about" style="color: white;">Research</a>
+            </nav>
+            <div class="nav-buttons">
+                <button id="lang-toggle" class="nav-cta">
+                    <span id="lang-text">বাংলা</span>
+                </button>
+                <button id="enter-app-btn" class="nav-cta" data-i18n="nav-enter">Enter App</button>
             </div>
         </header>
-        
+
         <main class="main-content">
             <div id="map" class="map-container"></div>
         </main>
@@ -28,19 +45,20 @@
 
     <!-- Leaflet JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    
+
     <!-- Localization Module -->
-    <script src="../modules/localization.js"></script>
-    
+    <script src="js/localization.js"></script>
+
     <!-- Local Risk Map Module -->
-    <script src="../modules/localRiskMap.js"></script>
-    
+    <script src="js/localRiskMap.js"></script>
+
     <!-- Initialize Map -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const localRiskMap = new LocalRiskMap();
             localRiskMap.initialize();
         });
     </script>
 </body>
+
 </html>

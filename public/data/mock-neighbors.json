@@ -2,166 +2,166 @@
   {
     "id": "neighbor_001",
     "coordinates": {
-      "latitude": 23.8103,
-      "longitude": 90.4125
+      "latitude": 22.3650,
+      "longitude": 91.7950
     },
     "riskLevel": "Low",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T10:30:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_002",
     "coordinates": {
-      "latitude": 23.7850,
-      "longitude": 90.3950
+      "latitude": 22.3420,
+      "longitude": 91.7910
     },
     "riskLevel": "Medium",
     "cropType": "wheat",
     "lastUpdateTime": "2024-11-28T09:15:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_003",
     "coordinates": {
-      "latitude": 23.8250,
-      "longitude": 90.4300
+      "latitude": 22.3780,
+      "longitude": 91.8020
     },
     "riskLevel": "High",
     "cropType": "vegetables",
     "lastUpdateTime": "2024-11-28T08:45:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_004",
     "coordinates": {
-      "latitude": 23.7600,
-      "longitude": 90.3750
+      "latitude": 22.3350,
+      "longitude": 91.7850
     },
     "riskLevel": "Low",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T11:00:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_005",
     "coordinates": {
-      "latitude": 23.8400,
-      "longitude": 90.4500
+      "latitude": 22.3620,
+      "longitude": 91.8150
     },
     "riskLevel": "Medium",
     "cropType": "vegetables",
     "lastUpdateTime": "2024-11-28T10:00:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_006",
     "coordinates": {
-      "latitude": 23.7450,
-      "longitude": 90.3600
+      "latitude": 22.3480,
+      "longitude": 91.7880
     },
     "riskLevel": "High",
     "cropType": "wheat",
     "lastUpdateTime": "2024-11-28T07:30:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_007",
     "coordinates": {
-      "latitude": 23.8550,
-      "longitude": 90.4650
+      "latitude": 22.3850,
+      "longitude": 91.7920
     },
     "riskLevel": "Low",
     "cropType": "vegetables",
     "lastUpdateTime": "2024-11-28T11:30:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_008",
     "coordinates": {
-      "latitude": 23.7300,
-      "longitude": 90.3450
+      "latitude": 22.3250,
+      "longitude": 91.7980
     },
     "riskLevel": "Medium",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T09:45:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_009",
     "coordinates": {
-      "latitude": 23.8700,
-      "longitude": 90.4800
+      "latitude": 22.3720,
+      "longitude": 91.8250
     },
     "riskLevel": "High",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T08:00:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_010",
     "coordinates": {
-      "latitude": 23.7150,
-      "longitude": 90.3300
+      "latitude": 22.3380,
+      "longitude": 91.8080
     },
     "riskLevel": "Low",
     "cropType": "wheat",
     "lastUpdateTime": "2024-11-28T10:15:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_011",
     "coordinates": {
-      "latitude": 23.8850,
-      "longitude": 90.4950
+      "latitude": 22.3920,
+      "longitude": 91.7850
     },
     "riskLevel": "Medium",
     "cropType": "vegetables",
     "lastUpdateTime": "2024-11-28T09:30:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_012",
     "coordinates": {
-      "latitude": 23.7000,
-      "longitude": 90.3150
+      "latitude": 22.3180,
+      "longitude": 91.8020
     },
     "riskLevel": "High",
     "cropType": "vegetables",
     "lastUpdateTime": "2024-11-28T07:00:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_013",
     "coordinates": {
-      "latitude": 23.9000,
-      "longitude": 90.5100
+      "latitude": 22.3550,
+      "longitude": 91.8350
     },
     "riskLevel": "Low",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T11:15:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_014",
     "coordinates": {
-      "latitude": 23.6850,
-      "longitude": 90.3000
+      "latitude": 22.3320,
+      "longitude": 91.7950
     },
     "riskLevel": "Medium",
     "cropType": "wheat",
     "lastUpdateTime": "2024-11-28T10:45:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   },
   {
     "id": "neighbor_015",
     "coordinates": {
-      "latitude": 23.9150,
-      "longitude": 90.5250
+      "latitude": 22.3980,
+      "longitude": 91.8120
     },
     "riskLevel": "High",
     "cropType": "rice",
     "lastUpdateTime": "2024-11-28T06:30:00Z",
-    "district": "Dhaka"
+    "district": "Chittagong"
   }
 ]

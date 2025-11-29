@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলা ভয়েস ইন্টারফেস</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 28px; }
+        h1 { font-size: 2.2em; margin-bottom: 4px }
+        p.lead { color: #333; margin-top: 0 }
+        .controls { margin: 18px 0 }
+        button.btn { padding: 10px 18px; font-size: 16px; cursor: pointer; margin: 6px }
+        .status { margin-top: 10px; color: #2a7; font-weight: 600 }
+        .error { color: #b33 }
+        .question { margin: 14px 0; font-size: 1.1em }
+        .examples { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:12px }
+        .example { background:#f0f0f0; padding:8px 12px; border-radius:6px; cursor:pointer }
+        .answer { margin-top: 18px; font-size:1.15em; color:#145c2b }
+        .hint { margin-top: 8px; color:#666 }
+        input[type="text"] { padding:8px; width:60%; max-width:420px }
+        @media (max-width:480px){ input[type="text"]{ width:100% } }
+        .lang-toggle { margin: 10px 0; }
+        .lang-btn { padding: 6px 12px; margin: 0 3px; border: 1px solid #ddd; background: #f8f9fa; cursor: pointer; }
+        .lang-btn.active { background: #007bff; color: white; }
+        .nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #007bff; color: white; }
+        .nav-logo { font-size: 1.5em; font-weight: bold; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { color: white; text-decoration: none; }
+        .nav-buttons { display: flex; gap: 10px; }
+        .nav-cta { padding: 8px 16px; border: none; border-radius: 4px; background: #ffc107; color: #333; cursor: pointer; }
+        .nav-cta:hover { background: #e0a800; }
+    </style>
+</head>
+<body>
+    <header class="nav">
+        <a href="/welcome.html" class="nav-logo" style="text-decoration: none; color: inherit; cursor: pointer;">KrishiRokkha</a>
+        <nav class="nav-links">
+            <a href="/about.html" data-i18n="nav-features">About Us</a>
+            <a href="/farmer_stories.html" data-i18n="nav-impact">Testimonies</a>
+            <a href="/our_research.html" data-i18n="nav-about">Research</a>
+        </nav>
+        <div class="nav-buttons">
+            <button id="lang-toggle" class="nav-cta">
+                <span id="lang-text">বাংলা</span>
+            </button>
+            <button id="enter-app-btn" class="nav-cta" data-i18n="nav-enter">Enter App</button>
+        </div>
+    </header>
+
+    <h1>বাংলা ভয়েস ইন্টারফেস</h1>
+    <p class="lead">আপনার প্রশ্ন জিজ্ঞাসা করুন — স্পর্শ ছাড়াই কথা বলুন বা নিচে টাইপ করে জিজ্ঞাসা করুন।</p>
+    
+    <div class="lang-toggle">
+        <button class="lang-btn active" id="lang-bn">বাংলা</button>
+        <button class="lang-btn" id="lang-en">English</button>
+    </div>
+    
+    <div style="background:#fff3cd; border:1px solid #ffeaa7; padding:10px; margin:10px 0; border-radius:5px;" id="tip-box">
+        <strong>💡 সহজ উপায়:</strong> নিচের উদাহরণগুলো ক্লিক করুন বা টেক্সট বক্সে টাইপ করুন — ভয়েস সমস্যা থাকলে এগুলো নির্ভরযোগ্য!
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="toggle-recognition">শুনুন (শুরু)</button>
+        <button class="btn" id="stop-recognition">বন্ধ করুন</button>
+        <div class="status" id="status">প্রস্তুত।</div>
+    </div>
+
+    <div class="hint">উদাহরণ বলে দেখুন বা ক্লিক করুন:</div>
+    <div class="examples" id="examples">
+        <div class="example">আজকের আবহাওয়া</div>
+        <div class="example">আমার ধানের অবস্থা</div>
+        <div class="example">গুদামে কী করব</div>
+        <div class="example">কবে কাটব</div>
+        <div class="example">জমির খবর</div>
+    </div>
+
+    <div class="question" id="question">আপনার প্রশ্ন এখানে দেখানো হবে।</div>
+    <div class="answer" id="answer">উত্তর এখানে দেখানো হবে।</div>
+
+    <div style="margin-top:18px">
+        <div class="hint">ফলাফল শুনতে না পারলে ব্রাউজারে মাইক্রোফোন অনুমতি দিন এবং Chrome/Edge ব্যবহার করুন।</div>
+        <div style="margin-top:8px">
+            <input id="text-input" type="text" placeholder="এখানে টাইপ করে প্রশ্ন করুন (বাংলা)" />
+            <button class="btn" id="ask-text">জিজ্ঞাসা</button>
+        </div>
+    </div>
+
+    <button class="btn" onclick="window.open('/aiScan.html', '_blank')" style="margin-top: 10px; padding: 10px 18px; background: #f6ad55; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        AI Scan Interface
+    </button>
+
+    <script>
+        // Current language (default: Bangla)
+        let currentLang = 'bn';
+        
+        // Multilingual Q->A mapping
+        const qaData = {
+            bn: [
+            {answers: ["আজকের আবহাওয়া কেমন?","আজকের আবহাওয়া","আবহাওয়া"], reply: "আজকের আবহাওয়া আংশিক মেঘলা থাকতে পারে; বৃষ্টি হলে খেতে কাজ বন্ধ রাখুন এবং জল নিষ্কাশনের ব্যবস্থা করুন।"},
+            {answers: ["আমার ধানের অবস্থা","ধানের অবস্থা","আমার ফসল"], reply: "আমার মূল্যায়ন অনুযায়ী ধানের অবস্থা ভালো। পাতায় হলদেটে দাগ বা পোকার আক্রমণ থাকলে নিকটস্থ কৃষি অফিসে যোগাযোগ করুন।"},
+            {answers: ["গুদামে কী করব","গুদাম সংরক্ষণ","শস্য সংরক্ষণ"], reply: "গুদাম ঢেকে এবং শুষ্ক পরিবেশে রাখুন। পচা হওয়া অংশ আলাদা করে রাখুন, এবং নিয়মিত আর্দ্রতা চেক করুন।"},
+            {answers: ["কবে কাটব","কাটা কবে","কখন কাটব"], reply: "ধান সাধারণত দানা শক্ত হলে ও আর্দ্রতা কমে ২০% থেকে ২৫% হলে কাটা ভালো। আপনার ধানের নমুনা দেখে নিশ্চিত হওয়া ভালো।"},
+            {answers: ["জমির খবর","মাঠের অবস্থা","জমি কেমন"], reply: "মাটির আর্দ্রতা এবং পুষ্টি সম্যক আছে। যদি পুষ্টি বাড়াতে চান, তাতে ঝুলে পড়ুন—উপযুক্ত সার ব্যবহার করুন।"},
+            {answers: ["পোকার সমস্যা","পোকা","জারা"], reply: "পোকার লক্ষণ দেখা গেলে প্রথমে মেকানিক্যাল নিয়ন্ত্রণ করুন (পোকা সরান), প্রয়োজনে সঠিক কীটনাশক ব্যবহার করুন — নিশ্চিত হন নাম ও মেশানোর অনুপাত জানতে।"},
+            {answers: ["কোন সার দেব","সার কী দেব","ফার্টিলাইজার"], reply: "সারের পরিমাণ আপনার ফসল ও মাটির ওপর নির্ভর করে; সাধারণত নাইট্রোজেন, ফসফরাস ও পটাশের সমন্বয় দরকার। স্থানীয় কৃষি অফিস থেকে মাটির পরীক্ষার পরামর্শ নিন।"},
+            {answers: ["সেচ কিভাবে","কতটা সেচ","সেচ"], reply: "সেচ растенияর ধরণের ওপর নির্ভর করে। ধানের জন্য নিয়মিত কিন্তু অতিরিক্ত জল এড়ানো উচিত; বাড়তি জল থাকলে শিকড় রোগ বাড়তে পারে।"},
+            {answers: ["রোগের লক্ষণ","ফসল রোগ","পাতায় দাগ"], reply: "পাতায় দাগ বা কঁকড়ে দেখা গেলে প্রথমে আক্রান্ত অংশ সরিয়ে ফেলুন। গুরুতর হলে স্থানীয় এনটেনশন অফিস বা কৃষি বিশেষজ্ঞের সঙ্গে পরামর্শ করুন।"},
+            {answers: ["বাজার মূল্য","ধানের দাম","কত দামে বিক্রি"], reply: "বাজার মূল্য এলাকাভিত্তিক ভিন্ন; নিকটবর্তী বাজারের হালনাগাদ জন্য মোবাইলে বা বাজার ফিরোজে চেক করুন। আমি আপনার জন্য বাজার API ইন্টিগ্রেট করতে পারি যদি আপনি চান।"},
+            {answers: ["পোস্তা ছাপা","পেস্টিসাইড বিধি","রোগ প্রতিরোধ"], reply: "কীটনাশক ব্যবহারের সময় লেবেল মেনে চলুন, প্রয়োজনীয় প্রতিরক্ষামূলক পোশাক ব্যবহার করুন এবং ফসল বিক্রির আগে প্রস্তাবিত রক্ষণাবেক্ষণ সময় মেনে চলুন।"},
+            {answers: ["বপন সময়","বপন কখন","বীজ বপন"], reply: "বপন সময় অঞ্চলের ঋতু ও বৃষ্টিপাতের ওপর নির্ভর করে। স্থানীয় কৃষি অফিস থেকে নির্দিষ্ট সময় নিশ্চিত করুন; সাধারণত মৌসুমের শুরুতে বপন করা ভাল।"}
+            ],
+            en: [
+                {answers: ["today's weather","weather today","weather"], reply: "Today's weather is partly cloudy. If it rains, stop field work and ensure proper drainage."},
+                {answers: ["rice condition","my crops","crop status"], reply: "Based on my assessment, your rice condition is good. If you see yellow spots or pest attacks, contact your local agriculture office."},
+                {answers: ["storage","warehouse","grain storage"], reply: "Store grains covered and in dry environment. Separate any spoiled portions and regularly check moisture levels."},
+                {answers: ["when to harvest","harvest time","when to cut"], reply: "Rice is usually ready when grains are firm and moisture drops to 20-25%. Check your rice samples to be sure."},
+                {answers: ["field condition","soil status","land condition"], reply: "Soil moisture and nutrients seem adequate. If you want to increase nutrients, use appropriate fertilizers."},
+                {answers: ["pest problem","insects","pests"], reply: "If you see pest symptoms, first try mechanical control (remove pests), then use proper pesticides - make sure you know the name and mixing ratio."},
+                {answers: ["fertilizer","what fertilizer","fertilizer type"], reply: "Fertilizer amount depends on your crop and soil; usually needs combination of nitrogen, phosphorus and potash. Get soil testing advice from local agriculture office."},
+                {answers: ["irrigation","watering","water management"], reply: "Irrigation depends on plant type. For rice, regular but avoid excess water; too much water can increase root diseases."},
+                {answers: ["disease symptoms","crop disease","leaf spots"], reply: "If you see spots or wilting on leaves, first remove affected parts. For serious cases, consult local extension office or agriculture experts."},
+                {answers: ["market price","rice price","selling price"], reply: "Market prices vary by area; check mobile apps or local markets for current updates. I can integrate market API for you if needed."},
+                {answers: ["pesticide safety","pesticide rules","disease prevention"], reply: "When using pesticides, follow label instructions, wear protective clothing and observe recommended waiting time before selling crops."},
+                {answers: ["planting time","sowing time","when to plant"], reply: "Planting time depends on regional seasons and rainfall patterns. Confirm specific timing from local agriculture office; usually best at season start."}
+            ]
+        };
+        
+        // UI Text translations
+        const uiText = {
+            bn: {
+                title: "বাংলা ভয়েস ইন্টারফেস",
+                subtitle: "আপনার প্রশ্ন জিজ্ঞাসা করুন — স্পর্শ ছাড়াই কথা বলুন বা নিচে টাইপ করে জিজ্ঞাসা করুন।",
+                tipText: "💡 সহজ উপায়: নিচের উদাহরণগুলো ক্লিক করুন বা টেক্সট বক্সে টাইপ করুন — ভয়েস সমস্যা থাকলে এগুলো নির্ভরযোগ্য!",
+                startBtn: "শুনুন (শুরু)",
+                stopBtn: "বন্ধ করুন",
+                listening: "শুনছে...",
+                ready: "প্রস্তুত।",
+                examplesHint: "উদাহরণ বলে দেখুন বা ক্লিক করুন:",
+                questionPlaceholder: "আপনার প্রশ্ন এখানে দেখানো হবে।",
+                answerPlaceholder: "উত্তর এখানে দেখানো হবে।",
+                inputPlaceholder: "এখানে টাইপ করে প্রশ্ন করুন (বাংলা)",
+                askBtn: "জিজ্ঞাসা",
+                examples: ["আজকের আবহাওয়া","আমার ধানের অবস্থা","গুদামে কী করব","কবে কাটব","জমির খবর"]
+            },
+            en: {
+                title: "Multilingual Voice Interface",
+                subtitle: "Ask your questions — speak hands-free or type below.",
+                tipText: "💡 Easy way: Click the examples below or use the text box — these are reliable when voice has issues!",
+                startBtn: "Listen (Start)",
+                stopBtn: "Stop",
+                listening: "Listening...",
+                ready: "Ready.",
+                examplesHint: "Try saying or click these examples:",
+                questionPlaceholder: "Your question will appear here.",
+                answerPlaceholder: "Answer will appear here.",
+                inputPlaceholder: "Type your question here (English)",
+                askBtn: "Ask",
+                examples: ["Today's weather","My rice condition","Storage advice","When to harvest","Field condition"],
+            }
+        };
+
+        function findAnswer(text){
+            if(!text) return null;
+            const t = text.toLowerCase();
+            const qa = qaData[currentLang];
+            for(const item of qa){
+                for(const k of item.answers){
+                    if(t.includes(k.replace(/\s+/g,'').toLowerCase()) || t.includes(k.toLowerCase())){
+                        return item.reply;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        // Update UI based on current language
+        function updateUI() {
+            const texts = uiText[currentLang];
+            document.querySelector('h1').textContent = texts.title;
+            document.querySelector('p.lead').textContent = texts.subtitle;
+            document.querySelector('#tip-box').innerHTML = '<strong>' + texts.tipText + '</strong>';
+            document.querySelector('#toggle-recognition').textContent = texts.startBtn;
+            document.querySelector('#stop-recognition').textContent = texts.stopBtn;
+            document.querySelector('#status').textContent = texts.ready;
+            document.querySelector('.hint').textContent = texts.examplesHint;
+            document.querySelector('#question').textContent = texts.questionPlaceholder;
+            document.querySelector('#answer').textContent = texts.answerPlaceholder;
+            document.querySelector('#text-input').placeholder = texts.inputPlaceholder;
+            document.querySelector('#ask-text').textContent = texts.askBtn;
+            
+            // Update examples
+            const examplesEl = document.querySelector('#examples');
+            examplesEl.innerHTML = '';
+            texts.examples.forEach(example => {
+                const div = document.createElement('div');
+                div.className = 'example';
+                div.textContent = example;
+                examplesEl.appendChild(div);
+            });
+            
+            // Update recognition language
+            if(recognition) {
+                recognition.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+            }
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const synth = window.speechSynthesis;
+        let recognition = null;
+        const statusEl = document.getElementById('status');
+        const startBtn = document.getElementById('toggle-recognition');
+        const stopBtn = document.getElementById('stop-recognition');
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const examplesEl = document.getElementById('examples');
+        const textInput = document.getElementById('text-input');
+        const askTextBtn = document.getElementById('ask-text');
+
+        // Build recognition if available
+        if(SpeechRecognition){
+            recognition = new SpeechRecognition();
+            recognition.lang = 'bn-BD';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            recognition.continuous = false;
+
+            recognition.addEventListener('start', ()=> {
+                const texts = uiText[currentLang];
+                statusEl.textContent = currentLang === 'bn' ? 'শুনছে... বলেন এখন।' : 'Listening... speak now.';
+                startBtn.textContent = texts.listening;
+                startBtn.disabled = true;
+            });
+            recognition.addEventListener('end', ()=> {
+                const texts = uiText[currentLang];
+                statusEl.textContent = currentLang === 'bn' ? 'শুনা বন্ধ হয়েছে। (শুরু করতে বোতাম চাপুন)' : 'Listening stopped. (Click button to start)';
+                startBtn.textContent = texts.startBtn;
+                startBtn.disabled = false;
+            });
+
+            recognition.addEventListener('result', (ev)=>{
+                const spoken = ev.results[0][0].transcript.trim();
+                const qLabel = currentLang === 'bn' ? 'প্রশ্ন: ' : 'Question: ';
+                const aLabel = currentLang === 'bn' ? 'উত্তর: ' : 'Answer: ';
+                const noMatch = currentLang === 'bn' ? 
+                    'দুঃখিত, আমি ঠিক বুঝতে পারিনি। অনুগ্রহ করে আরেকবার বলুন বা নিচে টাইপ করুন।' :
+                    'Sorry, I didn\'t quite understand. Please try again or use the text input below.';
+                questionEl.textContent = qLabel + spoken;
+                const ans = findAnswer(spoken) || noMatch;
+                answerEl.textContent = aLabel + ans;
+                speak(ans);
+            });
+
+            recognition.addEventListener('error', (ev)=>{
+                const texts = uiText[currentLang];
+                startBtn.textContent = texts.startBtn;
+                startBtn.disabled = false;
+                answerEl.innerHTML = '<span class="error">' + (currentLang === 'bn' ? 'ত্রুটি: ' : 'Error: ') + ev.error + '</span>';
+                if(ev.error === 'not-allowed' || ev.error === 'permission-denied'){
+                    statusEl.innerHTML = '<span class="error">' + (currentLang === 'bn' ? 
+                        'মাইক্রোফোন অনুমতি দরকার — ব্রাউজারের ঠিকানায় ক্লিক করে অনুমতি দিন।' :
+                        'Microphone permission needed — click on browser address bar to grant permission.') + '</span>';
+                } else if(ev.error === 'network'){
+                    statusEl.innerHTML = '<span class="error">🔴 ' + (currentLang === 'bn' ?
+                        'নেটওয়ার্ক সমস্যা — ভয়েস সার্ভিস অফলাইনে কাজ করে না। নিচের উদাহরণ ক্লিক করুন বা টেক্সট বক্স ব্যবহার করুন।' :
+                        'Network problem — voice service doesn\'t work offline. Click examples below or use text input.') + '</span>';
+                } else {
+                    statusEl.innerHTML = '<span class="error">' + (currentLang === 'bn' ?
+                        'ভয়েস সমস্যা হয়েছে — উদাহরণ ক্লিক করুন বা টেক্সট ইনপুট দিয়ে চেষ্টা করুন।' :
+                        'Voice problem — click examples or use text input.') + '</span>';
+                }
+            });
+        } else {
+            statusEl.innerHTML = '<span class="error">আপনার ব্রাউজার Web Speech API (SpeechRecognition) সমর্থন করে না। টেক্সট ইনপুট ব্যবহার করুন।</span>';
+            startBtn.disabled = true;
+            stopBtn.disabled = true;
+        }
+
+        startBtn.addEventListener('click', ()=>{
+            if(!recognition){ return }
+            const texts = uiText[currentLang];
+            try{ 
+                recognition.start(); 
+                statusEl.textContent = currentLang === 'bn' ? 'শুনতে শুরু করা হয়েছে...' : 'Starting to listen...'; 
+                startBtn.textContent = texts.listening;
+                startBtn.disabled = true;
+            }
+            catch(e){ 
+                console.warn('start error', e);
+                statusEl.innerHTML = '<span class="error">' + (currentLang === 'bn' ?
+                    'শুরু করতে সমস্যা — টেক্সট ইনপুট ব্যবহার করুন।' :
+                    'Problem starting — use text input.') + '</span>';
+            }
+        });
+
+        stopBtn.addEventListener('click', ()=>{
+            if(recognition){ 
+                const texts = uiText[currentLang];
+                recognition.stop(); 
+                statusEl.textContent = currentLang === 'bn' ? 'শুনা বন্ধ করা হয়েছে।' : 'Listening stopped.'; 
+                startBtn.textContent = texts.startBtn;
+                startBtn.disabled = false;
+            }
+        });
+
+        examplesEl.addEventListener('click', (ev)=>{
+            const t = ev.target;
+            if(t.classList.contains('example')){
+                const text = t.textContent.trim();
+                const qLabel = currentLang === 'bn' ? 'প্রশ্ন: ' : 'Question: ';
+                const aLabel = currentLang === 'bn' ? 'উত্তর: ' : 'Answer: ';
+                const noMatch = currentLang === 'bn' ? 
+                    'দুঃখিত, আমি বুঝতে পারিনি।' :
+                    'Sorry, I didn\'t understand.';
+                questionEl.textContent = qLabel + text;
+                const ans = findAnswer(text) || noMatch;
+                answerEl.textContent = aLabel + ans;
+                speak(ans);
+            }
+        });
+
+        askTextBtn.addEventListener('click', ()=>{
+            const txt = textInput.value.trim();
+            if(!txt){ return }
+            const qLabel = currentLang === 'bn' ? 'প্রশ্ন: ' : 'Question: ';
+            const aLabel = currentLang === 'bn' ? 'উত্তর: ' : 'Answer: ';
+            const noMatch = currentLang === 'bn' ? 
+                'দুঃখিত, আমি ঠিক বুঝতে পারিনি।' :
+                'Sorry, I didn\'t understand that question.';
+            questionEl.textContent = qLabel + txt;
+            const ans = findAnswer(txt) || noMatch;
+            answerEl.textContent = aLabel + ans;
+            speak(ans);
+        });
+
+        function speak(text){
+            if(!synth) return;
+            const utt = new SpeechSynthesisUtterance(text);
+            utt.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+            // try to pick appropriate voice
+            const voices = synth.getVoices();
+            if(voices && voices.length){
+                let voice;
+                if(currentLang === 'bn') {
+                    voice = voices.find(v=> /bengali|bangla|bn[-_]?bd|বাংলা/i.test(v.name+v.lang));
+                } else {
+                    voice = voices.find(v=> /en[-_]?us|english.*us/i.test(v.name+v.lang)) || 
+                           voices.find(v=> /english/i.test(v.name));
+                }
+                if(voice) utt.voice = voice;
+            }
+            synth.cancel();
+            synth.speak(utt);
+        }
+        
+        // Language switching handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('lang-bn').addEventListener('click', () => {
+                currentLang = 'bn';
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('lang-bn').classList.add('active');
+                updateUI();
+            });
+            
+            document.getElementById('lang-en').addEventListener('click', () => {
+                currentLang = 'en';
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('lang-en').classList.add('active');
+                updateUI();
+            });
+            
+            // Initialize UI on page load
+            updateUI();
+        });
+
+        // Quick usability: press Enter in text input to ask
+        textInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') askTextBtn.click(); });
+
+        // Try English fallback when Bangla fails
+        function tryEnglishFallback() {
+            if (!recognition) return;
+            setTimeout(() => {
+                statusEl.innerHTML += '<br><span class="hint">🔄 ' + (currentLang === 'bn' ? 
+                    'ইংরেজিতে চেষ্টা করছি (English fallback)...' :
+                    'Trying English fallback...') + '</span>';
+                recognition.lang = 'en-US';
+                try {
+                    recognition.start();
+                } catch(e) {
+                    statusEl.innerHTML = '<span class="error">' + (currentLang === 'bn' ?
+                        'সব ভাষায় ব্যর্থ — উদাহরণ ক্লিক করুন।' :
+                        'Failed in all languages — click examples.') + '</span>';
+                }
+            }, 1000);
+        }
+
+        // Initial small hint: supported browsers
+        (function initialHint(){
+            const ua = navigator.userAgent;
+            if(!/Chrome|Chromium|Edge/.test(ua)){
+                statusEl.innerHTML += ' <span class="hint">(Chrome/Edge এ ভালো কাজ করে)</span>';
+            }
+            // Add offline hint
+            if(!navigator.onLine){
+                statusEl.innerHTML += ' <span class="error">📡 অফলাইন — ভয়েস কাজ করবে না</span>';
+            }
+        })();
+    </script>
+</body>
+</html>
