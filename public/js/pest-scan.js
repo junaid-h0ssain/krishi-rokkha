@@ -3,8 +3,8 @@
  * Uses Google Gemini API with Google Search grounding for pest identification
  */
 
-// Get API key from Vite environment
-const GEMINI_API_KEY = 'AIzaSyAoSdV4OEZipSEPkw_d6HeBiUVBttS2Hro';
+// Get API key from window (injected by pest-scan-entry.js)
+const GEMINI_API_KEY = window.VITE_GOOGLE_AI_API_KEY || '';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 // DOM Elements
