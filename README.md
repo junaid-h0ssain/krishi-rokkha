@@ -1,187 +1,114 @@
-# 🌾 Krishi Rokkha (HarvestGuard)
+# 🌾 Krishi Rokkha — HarvestGuard
 
-**Krishi Rokkha** (HarvestGuard) is a comprehensive web application designed to empower farmers with modern technology. It combines AI-driven crop disease detection, real-time weather risk assessment, and efficient batch management to help farmers maximize their yield and protect their crops.
+Krishi Rokkha (HarvestGuard) is a lightweight, client-first web app that helps farmers monitor crop health, view weather-driven risk, and manage crop batches. The project combines AI-assisted image scanning, weather integration, simple batch management, and local-risk visualization to make agricultural decision-making easier and more accessible.
 
-![Project Status](https://img.shields.io/badge/Status-In%20Development-orange)
+![Status: In Development](https://img.shields.io/badge/status-in--development-orange)
 
-## ✨ Features
+## Table of contents
 
--   **AI Crop Health Scanner**: Instantly analyze crop photos to detect diseases (Fresh vs. Rotten) using advanced AI models.
--   **Weather & Risk Assessment**: Get real-time weather updates and automated risk alerts for your specific crops.
--   **Batch Management**: Create, track, and manage multiple crop batches with ease.
--   **Secure Authentication**: Easy login via **Google** or **Phone (OTP)** using Firebase Authentication.
--   **Multilingual Support**: Fully localized for **English** and **Bengali (বাংলা)** speakers.
--   **Responsive Design**: Optimized for both desktop and mobile devices.
--   **Educational Resources**: Access farmer stories, research articles, and best practices.
+- [Features](#features)
+- [Tech stack](#tech-stack)
+- [Quick start](#quick-start)
+- [Environment](#environment)
+- [Project structure](#project-structure)
+- [Development scripts](#development-scripts)
+- [Tests](#tests)
+- [Contributing](#contributing)
+- [License & contact](#license--contact)
 
-## Tech Stack
+## Features
 
--   **Frontend**: HTML5, CSS3, JavaScript (ES6+ Modules)
--   **Build Tool**: [Vite](https://vitejs.dev/)
--   **3D Visuals**: [Three.js](https://threejs.org/) (for immersive welcome animations)
--   **Backend & Auth**: [Firebase](https://firebase.google.com/) (Authentication, Firestore)
--   **AI/ML**: Roboflow / HuggingFace API integration
+- AI-powered crop image scanning (integrations for Roboflow / HuggingFace)
+- Weather-based risk assessment (OpenWeatherMap)
+- Batch creation and basic management interface
+- Local risk map visualization with anonymized neighbor data
+- Multilingual support (English / বাংলা)
+- Firebase Authentication (Google / Phone OTP) and optional Firestore persistence
 
-## Getting Started
+## Tech stack
 
-Follow these steps to set up the project locally.
+- Frontend: HTML, CSS, vanilla JavaScript (ES Modules)
+- Bundler: `vite`
+- Libraries: `three` (welcome/visuals), Leaflet (maps, if used in UI), Firebase SDK
 
-### Prerequisites
+## Quick start
 
--   [Node.js](https://nodejs.org/) (v16 or higher)
--   npm (Node Package Manager)
+Prerequisites:
 
-### Installation
+- Node.js (v16+)
+- npm (or pnpm/yarn)
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/junaid-h0ssain/krishi-rokkha.git
-    cd krishi-rokkha
-    ```
+Clone and run locally:
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Configure Environment Variables**
-    -   Create a `.env` file in the root directory.
-    -   Copy the contents of `.env.template` into `.env`.
-    -   Fill in your API configuration details:
-        
-        **Firebase Configuration:**
-        ```env
-        VITE_FIREBASE_API_KEY=your_firebase_api_key
-        VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-        VITE_FIREBASE_PROJECT_ID=your_project_id
-        VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-        VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-        VITE_FIREBASE_APP_ID=your_app_id
-        VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
-        ```
-        
-        **Cloudinary Configuration (for image uploads):**
-        ```env
-        VITE_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-        VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
-        ```
-        
-        **HuggingFace API Configuration (for AI model):**
-        ```env
-        VITE_HF_API_URL=your_huggingface_api_url
-        VITE_HF_API_KEY=your_huggingface_api_key
-        ```
-        
-        **Weather API Configuration (OpenWeatherMap):**
-        ```env
-        VITE_WEATHER_BASE_URL=https://api.openweathermap.org/data/2.5/weather
-        VITE_WEATHER_API_KEY=your_weather_api_key
-        ```
-        
-        **Roboflow API Configuration (for crop disease detection):**
-        ```env
-        VITE_RF_API_URL=your_roboflow_api_url
-        VITE_RF_API_KEY=your_roboflow_api_key
-        ```
-    
-    > **Note:** You'll need to create accounts and obtain API keys from:
-    > - [Firebase](https://firebase.google.com/)
-    > - [Cloudinary](https://cloudinary.com/)
-    > - [HuggingFace](https://huggingface.co/)
-    > - [OpenWeatherMap](https://openweathermap.org/api)
-    > - [Roboflow](https://roboflow.com/)
-
-4.  **Run the development server**
-    ```bash
-    npm run dev
-    ```
-    The app should now be running at `http://localhost:5173` (or similar).
-
-## 📂 Project Structure
-
-```
-krishi-rokkha/
-├── modules/                # Core feature modules
-│   ├── aiScan.js           # AI scanning logic
-│   ├── auth.js             # Authentication logic
-│   ├── batches.js          # Batch management
-│   ├── weather.js          # Weather integration
-│   └── ...
-├── public/                 # Static assets and HTML pages
-│   ├── about.html
-│   ├── farmer_stories.html
-│   └── ...
-├── src/                    # Main application source
-│   ├── app.js              # Main app entry logic
-│   ├── firebase-config.js  # Firebase setup
-│   ├── style.css           # Global styles
-│   ├── welcome.js          # Landing page logic
-│   └── ...
-├── app.html                # Main application interface
-├── welcome.html            # Landing page
-├── vite.config.js          # Vite configuration
-└── package.json            # Dependencies and scripts
+```bash
+git clone https://github.com/junaid-h0ssain/krishi-rokkha.git
+cd krishi-rokkha
+npm install
+npm run dev
 ```
 
-## 🏆 Onsite Challenges 
+Open `http://localhost:5173` in your browser.
 
-These tasks were implemented during the onsite session to simulate real-world decision-making, interactivity, and accessibility for farmers.
+## Environment
 
-## Local Risk Landscape Visualization
+This project uses Vite and environment variables prefixed with `VITE_`. Example variables used by the app include Firebase, Roboflow/HuggingFace, Cloudinary, and OpenWeatherMap keys. Environment values are referenced in `src` and `modules` files.
 
-  - Description: Establishes a Local Risk Map to promote community awareness of spoilage threats.
+Create a `.env` file in the project root and add any required keys, for example:
 
-  - Features:
+```env
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_WEATHER_API_KEY=your_openweather_api_key
+VITE_RF_API_KEY=your_roboflow_api_key
+```
 
-    - Responsive map (Leaflet.js) centered on the farmer’s district.
+If you don't plan to use external APIs, the app includes mocked data in `data/` and some modules that run in offline/demo mode.
 
-    - Mock neighbor data: 10–15 anonymous farms with coordinates and risk levels (Low/Medium/High).
+## Project structure (high level)
 
-  - Pin Visualization:
+- `modules/` — Core feature modules (AI scan, auth, batches, weather, etc.)
+- `public/` — Static HTML pages and assets
+- `src/` — App entry points and client scripts
+- `data/` — Mock data used for demos and local visualization
+- `test_images/` — Example images for AI scanning
 
-       - Farmer’s own location → blue pin
-        
-       -  Neighbor locations → color-coded markers (Green = Low, Yellow = Medium, Red = High)
-         
-       - Bangla pop-ups showing General Crop Type, Current Risk Level, and Last Update Time (mocked).
-        
-       - Touch-friendly interactivity: panning and zooming.
-        
-       - Privacy: All neighbor data completely anonymous.
+See the repository for more details.
 
-## Smart Alert System (Decision Engine)
+## Development scripts
 
-  - Description: Generates specific actionable advice in Bangla based on crop type, weather, and risk levels.
+Scripts available in `package.json`:
 
-  - Features:
+- `npm run dev` — Start Vite dev server
+- `npm run build` — Create production build
+- `npm run preview` — Preview the production build locally
 
-       - Bad alert example: “Weather is bad.” 
+Run them from the project root, e.g.:
 
-       - Good alert example: “আগামীকাল বৃষ্টি় হবে এবং আপনার আলুর গুদামে আর্দ্রতা বেশি। এখনই ফ্যান চালু করুন।”
+```bash
+npm run dev
+```
 
-       - Critical risk triggers a simulated SMS notification in the browser console.
+## Tests
 
-## Bangla Voice/Touchless Interface
+There are a few `*.test.js` files in the workspace (`modules/*.test.js`) but no test runner configured in `package.json`. To add tests, install a test framework (Jest, Vitest, etc.) and add a `test` script.
 
-  - Description: Farmers can ask questions in spoken Bangla and get spoken answers.
+## Contributing
 
-  - Features:
+- Report issues or feature requests via GitHub Issues.
+- For code changes: fork the repo, create a feature branch, and open a pull request with a clear description.
+- Please include screenshots, example images, or reproduction steps for UI/behavioral changes.
 
-       - Uses Web Speech API for recognition + synthesis (language: bn-BD).
+## License & contact
 
-       - Supports 4–5 common questions:
+This project does not include a license file in the repository. If you'd like to add one, `MIT` is a common choice for open-source projects.
 
-            - “আজকে র আবহাওয়া?”
-            
-            - “আমার ধানে র অবস্থা?”
-            
-            - “গুদামে কী করব?”
-            
-            - “কবে কাটব?”
+For questions or to collaborate, contact the maintainer: `junaid.hossain@example.com` (replace with real contact).
 
-  - Spoken answers generated dynamically based on mock data.
-  
-## Team Members
-- Fardina Tahsin (Full Stack)
-- Sujit Mohajon (Full Stack)
-- Junaid Hossain (Backend)
+---
+
+If you want, I can also:
+
+- add badges (build/test/coverage)
+- configure a test runner and add a `test` script
+- create a small CONTRIBUTING.md template
+
