@@ -9,6 +9,7 @@ export default defineConfig({
         welcome: resolve(__dirname, 'welcome.html'),
         app: resolve(__dirname, 'app.html'),
         smart_ai: resolve(__dirname, 'smart_ai.html'),
+        pest_scan_entry: resolve(__dirname, 'src/pest-scan-entry.js'),
         A4: resolve(__dirname, 'public/A4.html'),
         about: resolve(__dirname, 'public/about.html'),
         farmer_stories: resolve(__dirname, 'public/farmer_stories.html'),
