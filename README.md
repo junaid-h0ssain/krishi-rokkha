@@ -155,7 +155,7 @@ These tasks were implemented during the onsite session to simulate real-world de
 
   - Features:
 
-       - Bad alert example: “Weather is bad.”
+       - Bad alert example: “Weather is bad.” 
 
        - Good alert example: “আগামীকাল বৃষ্টি় হবে এবং আপনার আলুর গুদামে আর্দ্রতা বেশি। এখনই ফ্যান চালু করুন।”
 
