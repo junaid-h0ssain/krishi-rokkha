@@ -106,7 +106,9 @@ Follow these steps to set up the project locally.
     ```bash
     npm run dev
     ```
-    The app should now be running at `http://localhost:5173` (or similar).
+    The app should now be running at `http://localhost:5173` (or similar). (Open in Microsoft Edge) 
+
+It is also deployed in vercel. (Link given above)
 
 ## 📂 Project Structure
 
