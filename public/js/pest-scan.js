@@ -4,7 +4,9 @@
  */
 
 // Get API key from window (injected by pest-scan-entry.js)
-const GEMINI_API_KEY = window.VITE_GOOGLE_AI_API_KEY || '';
+import { GOOGLE_CONFIG } from "../../src/pest-scan-entry.js";
+
+const GEMINI_API_KEY = GOOGLE_CONFIG.apiKey;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 // DOM Elements
