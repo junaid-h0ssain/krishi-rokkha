@@ -4,7 +4,7 @@ import adapter from '@sveltejs/adapter-auto';
 const config = {
 	kit: {
 		adapter: adapter(),
-		// Code splitting configuration
+		// Code splitting configuration - routes are automatically code-split by SvelteKit
 		csp: {
 			mode: 'auto',
 			directives: {
