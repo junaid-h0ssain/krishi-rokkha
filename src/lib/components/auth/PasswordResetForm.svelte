@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resetPassword } from '$lib/services/auth';
 	import { goto } from '$app/navigation';
+	import { t } from '$lib/services/i18n';
 
 	let email = $state('');
 	let isSubmitting = $state(false);
@@ -15,9 +16,9 @@
 		try {
 			await resetPassword(email);
 			isSuccess = true;
-			message = 'Password reset email sent! Check your inbox.';
+			message = t('passwordResetEmailSent');
 		} catch (error: any) {
-			message = error.message || 'Failed to send reset email';
+			message = error.message || t('failedToSendResetEmail');
 		} finally {
 			isSubmitting = false;
 		}
@@ -25,18 +26,18 @@
 </script>
 
 <div class="reset-form">
-	<h2>Reset Password</h2>
-	<p>Enter your email address and we'll send you a link to reset your password.</p>
+	<h2>{t('resetPassword')}</h2>
+	<p>{t('resetPasswordDescription')}</p>
 
 	<form on:submit|preventDefault={handleReset}>
 		<div class="form-group">
-			<label for="email">Email</label>
+			<label for="email">{t('email')}</label>
 			<input
 				type="email"
 				id="email"
 				bind:value={email}
 				required
-				placeholder="Enter your email"
+				placeholder={t('enterEmail')}
 			/>
 		</div>
 
@@ -48,15 +49,15 @@
 
 		<button type="submit" disabled={isSubmitting || !email}>
 			{#if isSubmitting}
-				Sending...
+				{t('sendingResetLink')}
 			{:else}
-				Send Reset Link
+				{t('sendResetLink')}
 			{/if}
 		</button>
 	</form>
 
 	<p class="links">
-		<a href="/auth/login">Back to Login</a>
+		<a href="/auth/login">{t('backToLogin')}</a>
 	</p>
 </div>
 

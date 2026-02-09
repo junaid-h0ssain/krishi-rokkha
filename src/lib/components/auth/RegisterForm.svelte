@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { registerWithEmail, loginWithGoogle } from '$lib/services/auth';
 	import { goto } from '$app/navigation';
+	import { t } from '$lib/services/i18n';
 
 	let email = $state('');
 	let password = $state('');
@@ -11,15 +12,15 @@
 
 	function validateForm() {
 		if (!email || !password || !displayName) {
-			error = 'All fields are required';
+			error = t('allFieldsRequired');
 			return false;
 		}
 		if (password !== confirmPassword) {
-			error = 'Passwords do not match';
+			error = t('passwordsDoNotMatch');
 			return false;
 		}
 		if (password.length < 6) {
-			error = 'Password must be at least 6 characters';
+			error = t('passwordMinLength');
 			return false;
 		}
 		return true;
@@ -34,7 +35,7 @@
 			await registerWithEmail(email, password, displayName);
 			goto('/profile'); // Redirect to profile setup
 		} catch (err: any) {
-			error = err.message || 'Registration failed';
+			error = err.message || t('registrationFailed');
 		} finally {
 			isSubmitting = false;
 		}
@@ -47,7 +48,7 @@
 			await loginWithGoogle();
 			goto('/profile'); // Redirect to profile setup
 		} catch (err: any) {
-			error = err.message || 'Google registration failed';
+			error = err.message || t('googleRegistrationFailed');
 		} finally {
 			isSubmitting = false;
 		}
@@ -55,51 +56,51 @@
 </script>
 
 <div class="register-form">
-	<h2>Create Account</h2>
+	<h2>{t('createAccount')}</h2>
 
 	<form on:submit|preventDefault={handleEmailRegister}>
 		<div class="form-group">
-			<label for="displayName">Full Name</label>
+			<label for="displayName">{t('fullName')}</label>
 			<input
 				type="text"
 				id="displayName"
 				bind:value={displayName}
 				required
-				placeholder="Enter your full name"
+				placeholder={t('enterFullName')}
 			/>
 		</div>
 
 		<div class="form-group">
-			<label for="email">Email</label>
+			<label for="email">{t('email')}</label>
 			<input
 				type="email"
 				id="email"
 				bind:value={email}
 				required
-				placeholder="Enter your email"
+				placeholder={t('enterEmail')}
 			/>
 		</div>
 
 		<div class="form-group">
-			<label for="password">Password</label>
+			<label for="password">{t('password')}</label>
 			<input
 				type="password"
 				id="password"
 				bind:value={password}
 				required
-				placeholder="Create a password"
+				placeholder={t('createPassword')}
 				minlength="6"
 			/>
 		</div>
 
 		<div class="form-group">
-			<label for="confirmPassword">Confirm Password</label>
+			<label for="confirmPassword">{t('confirmPassword')}</label>
 			<input
 				type="password"
 				id="confirmPassword"
 				bind:value={confirmPassword}
 				required
-				placeholder="Confirm your password"
+				placeholder={t('confirmYourPassword')}
 			/>
 		</div>
 
@@ -109,27 +110,27 @@
 
 		<button type="submit" disabled={isSubmitting}>
 			{#if isSubmitting}
-				Creating account...
+				{t('creatingAccount')}
 			{:else}
-				Create Account
+				{t('createAccount')}
 			{/if}
 		</button>
 	</form>
 
 	<div class="divider">
-		<span>or</span>
+		<span>{t('or')}</span>
 	</div>
 
 	<button class="google-btn" on:click={handleGoogleRegister} disabled={isSubmitting}>
 		{#if isSubmitting}
-			Signing up...
+			{t('signingIn')}
 		{:else}
-			Continue with Google
+			{t('continueWithGoogle')}
 		{/if}
 	</button>
 
 	<p class="links">
-		<a href="/auth/login">Already have an account? Login</a>
+		<a href="/auth/login">{t('alreadyHaveAccount')} {t('login')}</a>
 	</p>
 </div>
 

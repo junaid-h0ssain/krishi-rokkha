@@ -5,6 +5,7 @@
 	import { authStore } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import LanguageToggle from '$lib/components/common/LanguageToggle.svelte';
 
 	let { children, data } = $props();
 
@@ -31,7 +32,12 @@
 		<p>Loading...</p>
 	</div>
 {:else}
-	{@render children()}
+	<header class="app-header">
+		<LanguageToggle />
+	</header>
+	<main>
+		{@render children()}
+	</main>
 {/if}
 
 <style>
@@ -62,5 +68,17 @@
 	@keyframes spin {
 		0% { transform: rotate(0deg); }
 		100% { transform: rotate(360deg); }
+	}
+
+	.app-header {
+		position: fixed;
+		top: 0;
+		right: 0;
+		padding: 1rem;
+		z-index: 1000;
+	}
+
+	main {
+		padding-top: 4rem; /* Space for fixed header */
 	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { loginWithEmail, loginWithGoogle } from '$lib/services/auth';
 	import { goto } from '$app/navigation';
+	import { t } from '$lib/services/i18n';
 
 	let email = $state('');
 	let password = $state('');
@@ -34,36 +35,36 @@
 </script>
 
 <div class="login-form">
-	<h2>Login to KrishiRokkha</h2>
+	<h2>{t('loginToKrishiRokkha')}</h2>
 
 	<form on:submit|preventDefault={handleEmailLogin}>
 		<div class="form-group">
-			<label for="email">Email</label>
+			<label for="email">{t('email')}</label>
 			<input
 				type="email"
 				id="email"
 				bind:value={email}
 				required
-				placeholder="Enter your email"
+				placeholder={t('email')}
 			/>
 		</div>
 
 		<div class="form-group">
-			<label for="password">Password</label>
+			<label for="password">{t('password')}</label>
 			<input
 				type="password"
 				id="password"
 				bind:value={password}
 				required
-				placeholder="Enter your password"
+				placeholder={t('password')}
 			/>
 		</div>
 
 		<button type="submit" disabled={isSubmitting}>
 			{#if isSubmitting}
-				Logging in...
+				{t('loggingIn')}
 			{:else}
-				Login
+				{t('login')}
 			{/if}
 		</button>
 	</form>
@@ -74,15 +75,15 @@
 
 	<button class="google-btn" on:click={handleGoogleLogin} disabled={isSubmitting}>
 		{#if isSubmitting}
-			Signing in...
+			{t('signingIn')}
 		{:else}
-			Continue with Google
+			{t('continueWithGoogle')}
 		{/if}
 	</button>
 
 	<p class="links">
-		<a href="/auth/register">Don't have an account? Register</a>
-		<a href="/auth/reset-password">Forgot password?</a>
+		<a href="/auth/register">{t('dontHaveAccount')} {t('register')}</a>
+		<a href="/auth/reset-password">{t('forgotPassword')}</a>
 	</p>
 </div>
 
