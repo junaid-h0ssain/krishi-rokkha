@@ -201,27 +201,3 @@ Run them from the project root, e.g.:
 npm run dev
 ```
 
-## Tests
-
-There are a few `*.test.js` files in the workspace (`modules/*.test.js`) but no test runner configured in `package.json`. To add tests, install a test framework (Jest, Vitest, etc.) and add a `test` script.
-
-## Contributing
-
-- Report issues or feature requests via GitHub Issues.
-- For code changes: fork the repo, create a feature branch, and open a pull request with a clear description.
-- Please include screenshots, example images, or reproduction steps for UI/behavioral changes.
-
-## License & contact
-
-This project does not include a license file in the repository. If you'd like to add one, `MIT` is a common choice for open-source projects.
-
-For questions or to collaborate, contact the maintainer: `junaid.hossain@example.com` (replace with real contact).
-
----
-
-If you want, I can also:
-
-- add badges (build/test/coverage)
-- configure a test runner and add a `test` script
-- create a small CONTRIBUTING.md template
-
