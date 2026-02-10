@@ -31,7 +31,7 @@
 {#if show}
     <div class="border-l-4 p-4 {typeClasses[type]} {className}" role="alert" {...props}>
         <div class="flex">
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d={iconPaths[type]} clip-rule="evenodd" />
                 </svg>
