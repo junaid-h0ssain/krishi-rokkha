@@ -1,5 +1,6 @@
 import { authStore, type User } from '$lib/stores/auth';
-import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOutUser as firebaseSignOut, sendPasswordReset as firebaseSendPasswordReset, onAuthStateChanged } from './firebase';
+import { signUpWithEmail, signInWithEmail, signInWithGoogle, signOutUser as firebaseSignOut, sendPasswordReset as firebaseSendPasswordReset, onAuthStateChanged,
+	updateUserProfile, sendPhoneOTP as firebaseSendPhoneOTP, verifyPhoneOTP as firebaseVerifyPhoneOTP, setDocument, getCurrentUser as getFirebaseCurrentUser } from './firebase';
 import { goto } from '$app/navigation';
 
 // Initialize auth state listener
@@ -75,9 +76,42 @@ export async function resetPassword(email: string): Promise<void> {
 }
 
 export async function verifyPhoneOTP(phoneNumber: string, otp: string): Promise<void> {
-	// TODO: Implement phone verification
-	// This would require additional Firebase setup for phone auth
-	throw new Error('Phone verification not yet implemented');
+	// Deprecated: use verifyPhoneOTPWithId which accepts verificationId + code.
+	throw new Error('Use verifyPhoneOTPWithId(verificationId, code) instead');
+}
+
+export async function sendPhoneOTP(phoneNumber: string, recaptchaContainerId = 'recaptcha-container'): Promise<string> {
+	try {
+		return await firebaseSendPhoneOTP(phoneNumber, recaptchaContainerId);
+	} catch (error: any) {
+		throw error;
+	}
+}
+
+export async function verifyPhoneOTPWithId(verificationId: string, code: string): Promise<void> {
+	try {
+		await firebaseVerifyPhoneOTP(verificationId, code);
+	} catch (error: any) {
+		throw error;
+	}
+}
+
+export async function updateProfileData(updates: { displayName?: string; photoURL?: string; language?: string; }): Promise<void> {
+	try {
+		await updateUserProfile({ displayName: updates.displayName, photoURL: updates.photoURL });
+		const fbUser = getFirebaseCurrentUser();
+		if (fbUser) {
+			// Persist profile fields to Firestore users collection
+			const docData: Record<string, any> = {};
+			if (updates.displayName !== undefined) docData.displayName = updates.displayName;
+			if (updates.language !== undefined) docData.language = updates.language;
+			if (Object.keys(docData).length > 0) {
+				await setDocument('users', fbUser.uid, docData, true);
+			}
+		}
+	} catch (error: any) {
+		throw error;
+	}
 }
 
 export function getCurrentUser(): User | null {
