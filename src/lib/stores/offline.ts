@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 
 export interface SyncAction {
 	id: string;
@@ -15,13 +16,13 @@ export interface OfflineState {
 }
 
 export const offlineStore = writable<OfflineState>({
-	isOnline: navigator.onLine,
+	isOnline: browser ? navigator.onLine : true,
 	syncQueue: [],
 	cachedData: {}
 });
 
-// Track online/offline status
-if (typeof window !== 'undefined') {
+// Track online/offline status only in the browser
+if (browser) {
 	window.addEventListener('online', () => {
 		offlineStore.update(state => ({ ...state, isOnline: true }));
 	});

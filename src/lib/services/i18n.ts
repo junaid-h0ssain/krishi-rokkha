@@ -250,12 +250,12 @@ const translations = {
 	}
 };
 
-// Current language (reactive)
-let currentLanguage = $state('en');
+// Current language (kept in sync with `languageStore`)
+let currentLanguage = 'en';
 
-// Update current language when store changes
-$effect(() => {
-	currentLanguage = $languageStore;
+// Keep currentLanguage in sync with the store
+languageStore.subscribe((v) => {
+	currentLanguage = v || 'en';
 });
 
 /**

@@ -4,7 +4,9 @@
   import WeatherDisplay from '$lib/components/weather/WeatherDisplay.svelte';
   import { fetchWeatherForDistrict } from '$lib/services/weather';
 
-  let selected: string = localStorage.getItem('weather.location') || '';
+  import { browser } from '$app/environment';
+  let selected: string = '';
+  if (browser) selected = localStorage.getItem('weather.location') || '';
   let daily: any[] = [];
   let loading = false;
   let error: string | null = null;
@@ -15,7 +17,7 @@
     try {
       const data = await fetchWeatherForDistrict(loc);
       daily = data;
-      localStorage.setItem('weather.location', loc);
+      if (browser) localStorage.setItem('weather.location', loc);
     } catch (e) {
       error = 'Failed to load weather';
     } finally { loading = false; }

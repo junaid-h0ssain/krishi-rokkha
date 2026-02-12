@@ -1,8 +1,12 @@
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 
 export type Language = 'en' | 'bn';
 
-const stored = localStorage.getItem('language');
-export const languageStore = writable<Language>(stored === 'bn' ? 'bn' : 'en');
+const initial: Language = (browser && localStorage.getItem('language') === 'bn') ? 'bn' : 'en';
+export const languageStore = writable<Language>(initial);
 
-languageStore.subscribe(value => localStorage.setItem('language', value));
+// Persist language preference only in the browser
+if (browser) {
+	languageStore.subscribe((value) => localStorage.setItem('language', value));
+}

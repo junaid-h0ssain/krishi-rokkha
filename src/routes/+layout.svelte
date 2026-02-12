@@ -6,6 +6,11 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import LanguageToggle from '$lib/components/common/LanguageToggle.svelte';
+	import ErrorBoundary from '$lib/components/common/ErrorBoundary.svelte';
+	import NotificationCenter from '$lib/components/common/NotificationCenter.svelte';
+	import { onMount } from 'svelte';
+	import { initOfflineService } from '$lib/services/offline';
+	import { createBatch, updateBatch, deleteBatch } from '$lib/services/batches';
 
 	let { children, data } = $props();
 
@@ -22,6 +27,46 @@
 			}
 		}
 	});
+
+	// Processor to handle queued sync actions
+	async function syncProcessor(action: any): Promise<boolean> {
+		try {
+			if (action.collection === 'batches') {
+				if (action.type === 'create') {
+					// strip client-only fields
+					const { id, createdAt, updatedAt, ...payload } = action.data || {};
+					await createBatch(payload);
+					return true;
+				}
+
+				if (action.type === 'update') {
+					const data = action.data || {};
+					if (!data.id) return false;
+					const { id, ...updates } = data;
+					await updateBatch(id, updates);
+					return true;
+				}
+
+				if (action.type === 'delete') {
+					const data = action.data || {};
+					if (!data.id) return false;
+					await deleteBatch(data.id);
+					return true;
+				}
+			}
+
+			// unknown collection/action: don't remove from queue
+			return false;
+		} catch (e) {
+			// leave action in queue to retry later
+			console.warn('syncProcessor error', e);
+			return false;
+		}
+	}
+
+	onMount(() => {
+		initOfflineService(syncProcessor);
+	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -34,9 +79,12 @@
 {:else}
 	<header class="app-header">
 		<LanguageToggle />
+		<NotificationCenter />
 	</header>
 	<main>
-		{@render children()}
+		<ErrorBoundary>
+			{@render children()}
+		</ErrorBoundary>
 	</main>
 {/if}
 

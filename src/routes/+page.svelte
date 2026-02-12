@@ -6,11 +6,13 @@
 	import Statistics from '$lib/components/dashboard/Statistics.svelte';
 	import AlertsSection from '$lib/components/dashboard/AlertsSection.svelte';
 	import AddBatchForm from '$lib/components/dashboard/AddBatchForm.svelte';
+	 import ExportModal from '$lib/components/dashboard/ExportModal.svelte';
 	import { authStore } from '$lib/stores/auth';
 
 	let user = null;
 	let isLoading = false;
 	let showAddForm = false;
+	let exportOpen = false;
 
 	// Subscribe to auth store
 	const unsubscribeAuth = authStore.subscribe((state) => {
@@ -70,6 +72,9 @@
 			<div class="flex justify-between items-center mb-6">
 				<h2 class="text-2xl font-semibold text-gray-900">Your Batches</h2>
 				<div class="flex items-center space-x-3">
+					<button class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700" on:click={() => exportOpen = true}>
+						Export
+					</button>
 					<button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" on:click={() => showAddForm = !showAddForm}>
 						{#if showAddForm}Close{/if}
 						{#if !showAddForm}Add New Batch{/if}
@@ -81,6 +86,10 @@
 				<div class="mb-6">
 					<AddBatchForm on:created={() => { showAddForm = false; loadBatches(); }} on:cancel={() => (showAddForm = false)} />
 				</div>
+			{/if}
+
+			{#if exportOpen}
+				<ExportModal on:close={() => (exportOpen = false)} />
 			{/if}
 
 			<BatchList />

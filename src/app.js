@@ -338,6 +338,7 @@ const LANG = {
         updatePwdBtn: "পাসওয়ার্ড আপডেট করুন"
     }
 };
+const isBrowser = typeof window !== 'undefined';
 
 let currentUser = null;
 let currentLang = "en";
@@ -355,7 +356,7 @@ if (!window.HG) {
 
 // Language handling (Req 6)
 function loadLanguagePreference(user) {
-    const fromLocal = localStorage.getItem("hg_lang");
+    const fromLocal = isBrowser ? localStorage.getItem("hg_lang") : null;
     if (fromLocal) {
         currentLang = fromLocal;
     }
@@ -404,7 +405,7 @@ function applyLanguage() {
     // Re-render batches to update their internal text
     renderBatches();
 
-    localStorage.setItem("hg_lang", currentLang);
+    if (isBrowser) localStorage.setItem("hg_lang", currentLang);
 }
 
 // Auth UI switches
@@ -443,7 +444,7 @@ registerForm.addEventListener("submit", async (e) => {
         });
 
         currentLang = language;
-        localStorage.setItem("hg_lang", currentLang);
+        if (isBrowser) localStorage.setItem("hg_lang", currentLang);
         alert("Account created.");
     } catch (err) {
         if (err.code === "auth/email-already-in-use") {
@@ -489,13 +490,13 @@ if (googleLoginBtn) {
                     badges: []
                 });
                 currentLang = "en";
-                localStorage.setItem("hg_lang", currentLang);
+                if (isBrowser) localStorage.setItem("hg_lang", currentLang);
             } else {
                 // Existing user, load language preference
                 const data = userDocSnap.data();
                 if (data.language) {
                     currentLang = data.language;
-                    localStorage.setItem("hg_lang", currentLang);
+                    if (isBrowser) localStorage.setItem("hg_lang", currentLang);
                 }
             }
             // onAuthStateChanged will handle the UI switch
@@ -885,14 +886,14 @@ async function pushBatchToFirestore(batch) {
 }
 
 function enqueueOperation(op) {
-    const queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]");
+    const queue = JSON.parse(isBrowser ? (localStorage.getItem(QUEUE_KEY) || "[]") : "[]");
     queue.push(op);
-    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+    if (isBrowser) localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
 }
 
 async function processQueue() {
-    const queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || "[]");
-    if (!queue.length || !navigator.onLine || !currentUser) return;
+    const queue = JSON.parse(isBrowser ? (localStorage.getItem(QUEUE_KEY) || "[]") : "[]");
+    if (!queue.length || !(isBrowser ? navigator.onLine : true) || !currentUser) return;
     for (const op of queue) {
         try {
             if (op.type === "addBatch") {
@@ -904,18 +905,18 @@ async function processQueue() {
             // leave in queue
         }
     }
-    localStorage.setItem(QUEUE_KEY, "[]");
+    if (isBrowser) localStorage.setItem(QUEUE_KEY, "[]");
 }
 
-window.addEventListener("online", processQueue);
+if (isBrowser) window.addEventListener("online", processQueue);
 
 // Local batches storage
 function saveLocalBatches() {
-    localStorage.setItem(LOCAL_BATCHES_KEY, JSON.stringify(batchesCache));
+    if (isBrowser) localStorage.setItem(LOCAL_BATCHES_KEY, JSON.stringify(batchesCache));
 }
 
 function loadLocalBatches() {
-    const raw = localStorage.getItem(LOCAL_BATCHES_KEY);
+    const raw = isBrowser ? localStorage.getItem(LOCAL_BATCHES_KEY) : null;
     if (raw) {
         try {
             batchesCache = JSON.parse(raw);

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { authStore } from '$lib/stores/auth';
   import { updateProfileData } from '$lib/services/auth';
-  import { Language } from '$lib/stores/language';
+  import type { Language } from '$lib/stores/language';
   import { onDestroy } from 'svelte';
 
   let unsubscribe = () => {};

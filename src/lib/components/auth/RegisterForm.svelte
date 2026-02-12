@@ -10,20 +10,15 @@
 	let isSubmitting = $state(false);
 	let error = $state('');
 
+	import { validateRegister } from '$lib/utils/validation';
+
 	function validateForm() {
-		if (!email || !password || !displayName) {
-			error = t('allFieldsRequired');
-			return false;
+		const { valid, errors } = validateRegister({ email, password, confirmPassword, displayName });
+		if (!valid) {
+			// show first translated error if possible, fallback to raw message
+			error = errors.length ? errors[0] : t('invalidForm');
 		}
-		if (password !== confirmPassword) {
-			error = t('passwordsDoNotMatch');
-			return false;
-		}
-		if (password.length < 6) {
-			error = t('passwordMinLength');
-			return false;
-		}
-		return true;
+		return valid;
 	}
 
 	async function handleEmailRegister() {
